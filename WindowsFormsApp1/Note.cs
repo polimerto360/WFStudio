@@ -11,6 +11,8 @@ namespace WFStudio
     {
         public static double twelveth_root_of_2 = Math.Pow(2, 1.0 / 12.0);
         public double Semitones = 0;
+        public double Phase = 0.0;
+        public double LastEnv = -1;
         public Note() { }
         public Note(double st, double length = 0, double start = 0) { // negative length plays forever
             Semitones = st;

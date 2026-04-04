@@ -36,7 +36,7 @@ namespace WFStudio
             Release_tension = release_tension;
         }
 
-        public double At(double t, double time_since_released = -1)
+        public double At(double t, double time_since_released = -1, double last_value = 0)
         {
             if(time_since_released > 0)
             {
@@ -44,16 +44,15 @@ namespace WFStudio
             }
             if (Attack > 0 && t < Attack)
             {
-                last_value = Tension(0, 1, t / Attack, Attack_tension);
+                return Tension(0, 1, t / Attack, Attack_tension);
                 
             } else if(t < Attack + Decay && Decay > 0)
             {
-                last_value = Sustain + Tension(1 - Sustain, 0, (t - Attack) / Decay, Decay_tension);
+                return Sustain + Tension(1 - Sustain, 0, (t - Attack) / Decay, Decay_tension);
             } else
             {
-                last_value = Sustain;
+                return Sustain;
             }
-            return last_value;
         }
     }
 }

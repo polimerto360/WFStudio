@@ -12,8 +12,6 @@ namespace WFStudio
         List<Note> CurNotes { get; set; }
         void PlayNote(Note n);
         void ReleaseNote(Note n);
-        Voice[] Voices { get; set; }
-
-
+        int VoiceCount { get; set; }
     }
 }

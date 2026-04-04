@@ -15,8 +15,8 @@ namespace WFStudio
 {
     public partial class Synth : Form, Generator
     {
-        public Voice[] Voices { get; set; } = new Voice[16];
-        
+        public int VoiceCount { get; set; } = 16;
+        Envelope env = new Envelope();
         public List<Note> CurNotes { get; set; } = new List<Note>();
         public void PlayNote(Note n)
         {
@@ -31,14 +31,13 @@ namespace WFStudio
             CurNotes = new List<Note>();
         }
         
-
         public int Read(float[] buffer, int offset, int count)
         {
             for (int i = offset; i < offset + count; i++) buffer[i] = 0f;
             for (int i = 0; i < CurNotes.Count; i++)
             {
                 Note note = CurNotes[i];
-                if(note.TimeSinceRelease >= Voices[i].env.Release)
+                if(note.TimeSinceRelease >= env.Release)
                 {
                     CurNotes.RemoveAt(i--);
                     continue;
@@ -48,9 +47,12 @@ namespace WFStudio
                 {
                     if (Program.Time <= note.Start + note.Length || note.Length < 0)
                     {
-                        WaveGen.Sine(ref buffer, offset, count, ref Voices[i], note);
+                        WaveGen.Sine(ref buffer, offset, count, env, ref note);
                     }
-                    else CurNotes.RemoveAt(i--);
+                    else
+                    {
+                        CurNotes.RemoveAt(i--);
+                    }
                 }
             }
             return count;
@@ -59,7 +61,6 @@ namespace WFStudio
 
         public Synth()
         {
-            for (int i = 0; i < Voices.Length; i++) Voices[i] = new Voice();
             InitializeComponent();
         }
     }

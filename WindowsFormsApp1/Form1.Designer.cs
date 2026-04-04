@@ -28,23 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.fader1 = new NAudio.Gui.Fader();
             this.pot1 = new NAudio.Gui.Pot();
             this.volumeSlider1 = new NAudio.Gui.VolumeSlider();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // fader1
-            // 
-            this.fader1.Location = new System.Drawing.Point(339, 213);
-            this.fader1.Maximum = 0;
-            this.fader1.Minimum = 0;
-            this.fader1.Name = "fader1";
-            this.fader1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.fader1.Size = new System.Drawing.Size(400, 111);
-            this.fader1.TabIndex = 0;
-            this.fader1.Text = "fader1";
-            this.fader1.Value = -2147483648;
             // 
             // pot1
             // 
@@ -81,7 +68,6 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.volumeSlider1);
             this.Controls.Add(this.pot1);
-            this.Controls.Add(this.fader1);
             this.Name = "MainWindow";
             this.Text = "MainWindow";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -92,7 +78,6 @@
 
         #endregion
 
-        private NAudio.Gui.Fader fader1;
         private NAudio.Gui.Pot pot1;
         private NAudio.Gui.VolumeSlider volumeSlider1;
         private System.Windows.Forms.Button button1;

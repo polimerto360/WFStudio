@@ -37,10 +37,34 @@ namespace WFStudio
                 case Keys.L: n.Semitones += 13; break;
                 case Keys.OemPeriod: n.Semitones += 14; break;
                 case Keys.OemSemicolon: n.Semitones += 15; break;
-                case Keys.Divide: n.Semitones += 16; break;
+                case Keys.OemQuestion: n.Semitones += 16; break;
+
+                case Keys.Q: n.Semitones += 12; break;
+                case Keys.D2: n.Semitones += 13; break;
+                case Keys.W: n.Semitones += 14; break;
+                case Keys.D3: n.Semitones += 15; break;
+                case Keys.E: n.Semitones += 16; break;
+                case Keys.R: n.Semitones += 17; break;
+                case Keys.D5: n.Semitones += 18; break;
+                case Keys.T: n.Semitones += 19; break;
+                case Keys.D6: n.Semitones += 20; break;
+                case Keys.Y: n.Semitones += 21; break;
+                case Keys.D7: n.Semitones += 22; break;
+                case Keys.U: n.Semitones += 23; break;
+                case Keys.I: n.Semitones += 24; break;
+                case Keys.D9: n.Semitones += 25; break;
+                case Keys.O: n.Semitones += 26; break;
+                case Keys.D0: n.Semitones += 27; break;
+                case Keys.P: n.Semitones += 28; break;
+                case Keys.OemOpenBrackets: n.Semitones += 29; break;
+                case Keys.Oemplus: n.Semitones += 30; break;
+                case Keys.OemCloseBrackets: n.Semitones += 31; break;
             }
-            if (!notes.ContainsKey(e.KeyCode) && notes.Count < gen.Voices.Length) notes.Add(e.KeyCode, n);
-            gen.PlayNote(n);
+            if (!notes.ContainsKey(e.KeyCode) && notes.Count < gen.VoiceCount)
+            {
+                notes.Add(e.KeyCode, n);
+                gen.PlayNote(n);
+            }
         }
         public void KeyUp(object sender, KeyEventArgs e)
         {
