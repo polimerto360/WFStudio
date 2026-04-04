@@ -16,7 +16,7 @@ namespace WFStudio
     public partial class Synth : Form, Generator
     {
         public int VoiceCount { get; set; } = 16;
-        Envelope env = new Envelope();
+        Envelope env = new Envelope(sustain: 0.2, decay_tension: -0.3, release: 5);
         public List<Note> CurNotes { get; set; } = new List<Note>();
         public void PlayNote(Note n)
         {
@@ -47,7 +47,10 @@ namespace WFStudio
                 {
                     if (Program.Time <= note.Start + note.Length || note.Length < 0)
                     {
-                        WaveGen.Sine(ref buffer, offset, count, env, ref note);
+                        float[] note_buffer = new float[count];
+                        WaveGen.Sine(ref note_buffer, ref note);
+                        Envelope.Apply(ref note_buffer, env, ref note);
+                        WaveGen.AddBuffer(ref buffer, ref note_buffer, offset, count);
                     }
                     else
                     {

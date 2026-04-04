@@ -38,21 +38,36 @@ namespace WFStudio
 
         public double At(double t, double time_since_released = -1, double last_value = 0)
         {
-            if(time_since_released > 0)
+            if (time_since_released > 0)
             {
                 return Tension(last_value, 0, time_since_released / Release, Release_tension);
             }
             if (Attack > 0 && t < Attack)
             {
                 return Tension(0, 1, t / Attack, Attack_tension);
-                
-            } else if(t < Attack + Decay && Decay > 0)
+
+            }
+            else if (t < Attack + Decay && Decay > 0)
             {
                 return Sustain + Tension(1 - Sustain, 0, (t - Attack) / Decay, Decay_tension);
-            } else
+            }
+            else
             {
                 return Sustain;
             }
+        }
+        public static void Apply(ref float[] buffer, Envelope env, ref Note n, double volume = 1.0)
+        {
+            double sample_rate = Program.audio_output.OutputWaveFormat.SampleRate;
+            double begin_env = env.At(n.TimeElapsed, n.TimeSinceRelease, n.LastEnv);
+            double end_env = env.At(n.TimeElapsed + buffer.Length / sample_rate, (n.TimeSinceRelease > 0 ? n.TimeSinceRelease + buffer.Length / sample_rate : -1), n.LastEnv);
+
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] *= (float)(volume * Envelope.Lerp(begin_env, end_env, ((double)i / (double)buffer.Length)));
+                buffer[i] = (float)Math.Min(Math.Max(buffer[i], -1.0), 1.0);
+            }
+            if (n.TimeSinceRelease < 0) n.LastEnv = end_env;
         }
     }
 }
