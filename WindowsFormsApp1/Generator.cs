@@ -1,0 +1,19 @@
+﻿using NAudio.Wave;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WFStudio
+{
+    public interface Generator : ISampleProvider
+    {
+        List<Note> CurNotes { get; set; }
+        void PlayNote(Note n);
+        void ReleaseNote(Note n);
+        Voice[] Voices { get; set; }
+
+
+    }
+}
