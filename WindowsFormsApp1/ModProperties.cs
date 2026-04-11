@@ -10,5 +10,6 @@ namespace WFStudio
     {
         List<string> Properties { get; }
         bool SetProperty(string name, double value); // returns true if property was set
+        double GetBaseValue(string name);
     }
 }

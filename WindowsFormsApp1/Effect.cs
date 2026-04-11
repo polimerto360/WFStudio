@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
-    public interface Effect: ISampleProvider
+    public interface Effect: ISampleProvider, ModProperties
     {
 
     }

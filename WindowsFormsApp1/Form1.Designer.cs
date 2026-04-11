@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.pot1 = new NAudio.Gui.Pot();
             this.volumeSlider1 = new NAudio.Gui.VolumeSlider();
             this.button1 = new System.Windows.Forms.Button();
@@ -68,6 +69,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.volumeSlider1);
             this.Controls.Add(this.pot1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "MainWindow";
             this.Text = "MainWindow";

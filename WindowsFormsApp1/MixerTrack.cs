@@ -27,6 +27,6 @@ namespace WFStudio
             }
             return count;
         }
-        public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 2);
+        public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
     }
 }

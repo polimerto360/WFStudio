@@ -19,13 +19,20 @@ namespace WFStudio
     {
         public int VoiceCount { get; set; } = 16;
         public MixerTrack Target { get; set; } = Program.Master;
+        public WaveGen.Waves WaveType { get; set; } = WaveGen.Waves.SAW;
+        public double Volume = 1.0;
         public List<string> Properties { get; private set; } = new List<string>
         {
             "VoiceCount",
-            "OscShape"
+            "OscShape",
+            "Pitch shift",
+            "Volume"
         };
-        Envelope env = new Envelope(attack: 0.05, sustain: 0, decay: 0.5, decay_tension: -0.3, release: 0.1);
+        public Envelope env = new Envelope(attack: 0.05, sustain: 0, decay: 0.5, decay_tension: -0.3, release: 0.1);
+        public LFO lfo;
+        public FilterWrap Filter = new FilterWrap(1000, 2, FilterWrap.FilterType.LOWPASS);
         public List<Note> CurNotes { get; set; } = new List<Note>();
+        public double pitch_shift = 1;
         public void PlayNote(Note n)
         {
             CurNotes.Add(n);
@@ -41,6 +48,7 @@ namespace WFStudio
         
         public int Read(float[] buffer, int offset, int count)
         {
+            if(lfo != null) lfo.Update(count);
             for (int i = offset; i < offset + count; i++) buffer[i] = 0f;
             for (int i = 0; i < CurNotes.Count; i++)
             {
@@ -56,8 +64,9 @@ namespace WFStudio
                     if (Program.Time <= note.Start + note.Length || note.Length < 0)
                     {
                         float[] note_buffer = new float[count];
-                        WaveGen.Saw(ref note_buffer, ref note);
+                        note.Phase = WaveGen.Generate(ref note_buffer, WaveType, note.Phase, note.Pitch * pitch_shift, Volume * note.Velocity);
                         Envelope.Apply(ref note_buffer, env, ref note);
+
                         WaveGen.AddBuffer(ref buffer, ref note_buffer, offset, count);
                         //BiQuadFilter.LowPassFilter(44100, 10000, 2).
                         //DmoEffectWaveProvider<DmoCompressor> n = new DmoEffectWaveProvider<DmoCompressor>();
@@ -69,6 +78,8 @@ namespace WFStudio
                     }
                 }
             }
+            WaveGen.ApplyFilter(ref buffer, offset, count, Filter.Filter);
+            if(buffer != null) volumeMeter1.Amplitude = buffer.Select(x => Math.Abs(x)).Max();
             return count;
         }
         public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
@@ -80,19 +91,84 @@ namespace WFStudio
             {
                 Properties.Add("Envelope." + s);
             }
+            foreach (string s in Filter.Properties)
+            {
+                Properties.Add("Filter." + s);
+            }
             GotFocus += (object sedner, EventArgs e) => { Program.mainWindow.keyboard.gen = this; };
+            OnGotFocus(null);
+               
             KeyDown += Program.mainWindow.keyboard.KeyDown; KeyUp += Program.mainWindow.keyboard.KeyUp;
             InitializeComponent();
+            envControl1.Env = env;
+            lfo = new LFO(this, "Pitch shift", 5, 0.1, 0, WaveGen.Waves.SINE, 0);
+            lfoControl1.Lfo = lfo;
+            filterControl1.Filter = Filter;
+
         }
         public bool SetProperty(string name, double value)
         {
-            if (env.SetProperty(name.Substring(name.IndexOf('.')), value)) return true;
-            switch(name)
+            if(name.IndexOf('.') > -1)
+            {
+                switch(name.Substring(0, name.IndexOf('.')))
+                {
+                    case "Envelope": return env.SetProperty(name.Substring(name.IndexOf('.')+1), value);
+                    case "Filter": return Filter.SetProperty(name.Substring(name.IndexOf('.') + 1), value);
+                }
+                return false;
+            }
+
+            switch (name)
             {
                 case "VoiceCount": VoiceCount = (value < 0 ? int.MaxValue : (int)(value * 32)); return true;
                 case "OscShape": return true;
+                case "Pitch shift": pitch_shift = Math.Pow(2, value); return true;
+                case "Volume": volumeSlider1.Volume = (float)Math.Abs(value); return true;
             }
             return false;
+        }
+
+        public double GetBaseValue(string name)
+        {
+            //if (name.IndexOf('.') > -1)
+              //  if (env.GetBaseValue(name.Substring(name.IndexOf('.'))) != 0) return env.GetBaseValue(name.Substring(name.IndexOf('.')));
+            switch (name)
+            {
+                case "Pitch shift": return pot8.Value * 4 - 2.0 + (pot9.Value * 2 - 1.0) / 12;
+            }
+            return 0;
+        }
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch(listBox1.Text)
+            {
+                case "Sine": WaveType = WaveGen.Waves.SINE; break;
+                case "Saw": WaveType = WaveGen.Waves.SAW; break;
+                case "Square": WaveType = WaveGen.Waves.SQUARE; break;
+            }
+        }
+
+        private void pot8_ValueChanged(object sender, EventArgs e)
+        {
+            pot8.Value = Math.Round(pot8.Value * 48) / 48;
+            label15.Text = ((int)(pot8.Value * 48 - 24)).ToString();
+            SetProperty("Pitch shift", pot8.Value * 4 - 2.0 + (pot9.Value * 2 - 1.0) / 12);
+        }
+
+        private void pot9_ValueChanged(object sender, EventArgs e)
+        {
+            label17.Text = (pot9.Value * 200 - 100).ToString("f2");
+            SetProperty("Pitch shift", pot8.Value * 4 - 2.0 + (pot9.Value * 2 - 1.0) / 12);
+        }
+
+        private void Synth_MouseClick(object sender, MouseEventArgs e)
+        {
+            Program.mainWindow.keyboard.gen = this;
+        }
+
+        private void volumeSlider1_VolumeChanged(object sender, EventArgs e)
+        {
+            Volume = volumeSlider1.Volume;
         }
     }
 }

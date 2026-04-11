@@ -13,6 +13,7 @@ namespace WFStudio
         public double Semitones = 0;
         public double Phase = 0.0;
         public double LastEnv = -1;
+        public double Velocity = 1;
         public Note() { }
         public Note(double st, double length = 0, double start = 0) { // negative length plays forever
             Semitones = st;

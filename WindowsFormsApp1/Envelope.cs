@@ -52,6 +52,21 @@ namespace WFStudio
             return false;
         }
 
+        public double GetBaseValue(string property)
+        {
+            /*switch (property)
+            {
+                case "Attack": return Attack;
+                case "Attack_tension": return Attack_tension;
+                case "Sustain": return Sustain;
+                case "Decay": return Decay;
+                case "Decay_tension": return Decay_tension;
+                case "Release": return Release;
+                case "Release_tension": return Release_tension;
+            }*/
+            return 0;
+        }
+
         public double last_value;
         public Envelope(double attack = 0.1, double attack_tension = 0, double sustain = 0.8, double decay = 0.5, double decay_tension = 0, double release = 0.5, double release_tension = 0)
         {

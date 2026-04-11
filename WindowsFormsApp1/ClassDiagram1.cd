@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WFStudio.Envelope" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAFBACAAAAAAAAAIAACIGIAEAAgAAAQBACAAA=</HashCode>
+      <FileName>Envelope.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.664" Collapsed="true" />
+  </Class>
+  <Class Name="WFStudio.MainWindow" Collapsed="true">
+    <Position X="0.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIADAAAEAAAACAAAACAAQIAAAAAEAAAAAAQAA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.Keyboard" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAgAAAAAgAQAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Keyboard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.MasterTrack" Collapsed="true">
+    <Position X="1.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MasterTrack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.MixerTrack" Collapsed="true">
+    <Position X="1.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAQAAAAgAAAAAAAAAAIAAAAAQAA=</HashCode>
+      <FileName>MixerTrack.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WFStudio.Note" Collapsed="true">
+    <Position X="3" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAaQBAAAAAEAAAABAQAAAAAAAAABAAEAEBAk=</HashCode>
+      <FileName>Note.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.Program" Collapsed="true">
+    <Position X="6.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAEAAgACAAAAAAAAABAAAAAEAAAAABAAAAQA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.Synth" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>DgAAUAECACgEAZAkABCBECAiCAUAAAAAAAAIAAQCIPA=</HashCode>
+      <FileName>Synth.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.1" Collapsed="true" />
+  </Class>
+  <Class Name="WFStudio.WaveGen" Collapsed="true">
+    <Position X="6.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgIEAAAAAAAAAAAAAAAAAAACAAAAAAAAAQAEAAAAA=</HashCode>
+      <FileName>WaveGen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.Properties.Resources" Collapsed="true">
+    <Position X="13.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WFStudio.Properties.Settings" Collapsed="true">
+    <Position X="13.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="WFStudio.Effect" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Effect.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WFStudio.Generator" Collapsed="true">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAIAAAAAAACAAAAAAAAAAAAAIAAAAIAA=</HashCode>
+      <FileName>Generator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="WFStudio.ModProperties" Collapsed="true">
+    <Position X="4.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAEAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ModProperties.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
