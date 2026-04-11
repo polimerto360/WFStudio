@@ -16,19 +16,18 @@ namespace WFStudio
         public MainWindow()
         {
             InitializeComponent();
+            KeyDown += keyboard.KeyDown;
+            KeyUp += keyboard.KeyUp;
         }
         public Keyboard keyboard = new Keyboard();
         private void button1_Click(object sender, EventArgs e)
         {
             Synth p = new Synth();
-            keyboard.gen = p;
+            //keyboard.gen = p;
             p.Show();
-            
-            p.KeyDown += keyboard.KeyDown;
-            p.KeyUp += keyboard.KeyUp;
 
-            Program.audio_output.Init(p);
-            Program.audio_output.Play();
+            //p.KeyDown += keyboard.KeyDown;
+            //p.KeyUp += keyboard.KeyUp;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

@@ -60,7 +60,7 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Form1
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -68,6 +68,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.volumeSlider1);
             this.Controls.Add(this.pot1);
+            this.KeyPreview = true;
             this.Name = "MainWindow";
             this.Text = "MainWindow";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);

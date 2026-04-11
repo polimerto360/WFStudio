@@ -14,7 +14,7 @@ namespace WFStudio
         public Generator gen;
         public void KeyDown(object sender, KeyEventArgs e)
         {
-            if (notes.ContainsKey(e.KeyCode)) return;
+            if (notes.ContainsKey(e.KeyCode) || gen == null) return;
             Note n = new Note();
             n.Octave = octave;
             n.Length = -1;

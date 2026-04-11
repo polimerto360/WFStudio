@@ -10,6 +10,7 @@ namespace WFStudio
     public interface Generator : ISampleProvider
     {
         List<Note> CurNotes { get; set; }
+        MixerTrack Target { get; set; }
         void PlayNote(Note n);
         void ReleaseNote(Note n);
         int VoiceCount { get; set; }

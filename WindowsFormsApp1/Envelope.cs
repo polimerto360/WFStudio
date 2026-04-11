@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WFStudio
 {
-    public class Envelope
+    public class Envelope : ModProperties
     {
         public static double Lerp(double a, double b, double w)
         {
@@ -23,6 +25,32 @@ namespace WFStudio
         public double Decay_tension;
         public double Release;
         public double Release_tension;
+
+        public List<string> Properties { get; } = new List<string>
+        {
+            "Attack",
+            "Attack_tension",
+            "Sustain",
+            "Decay",
+            "Decay_tension",
+            "Release",
+            "Release_tension"
+        };
+
+        public bool SetProperty(string property, double value)
+        {
+            switch (property)
+            {
+                case "Attack": Attack = Math.Pow(value, 2) * 10; return true;
+                case "Attack_tension": Attack_tension = value; return true;
+                case "Sustain": Sustain = Math.Abs(value); return true;
+                case "Decay": Decay = Math.Pow(value, 2) * 10; return true;
+                case "Decay_tension": Decay_tension = value; return true;
+                case "Release": Release = Math.Pow(value, 2) * 10; return true;
+                case "Release_tension": Release_tension = value; return true;
+            }
+            return false;
+        }
 
         public double last_value;
         public Envelope(double attack = 0.1, double attack_tension = 0, double sustain = 0.8, double decay = 0.5, double decay_tension = 0, double release = 0.5, double release_tension = 0)
