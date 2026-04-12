@@ -59,6 +59,7 @@ namespace WFStudio
         }
         public enum FilterType
         {
+            OFF,
             HIGHPASS,
             LOWPASS,
             BANDPASS

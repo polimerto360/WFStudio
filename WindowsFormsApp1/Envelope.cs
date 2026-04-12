@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
 using System.Text;
@@ -12,10 +13,11 @@ namespace WFStudio
     {
         public static double Lerp(double a, double b, double w)
         {
-            return a + (b - a) * w;
+            return a + (b - a) * Math.Max(0, Math.Min(1, w));
         }
         public static double Tension(double from, double to, double w, double tension) //tension (-1, 1)
         {
+            Debug.Assert(!double.IsNaN(Math.Pow(Lerp(from, to, w), Math.Pow(10, -tension))));
             return Math.Pow(Lerp(from, to, w), Math.Pow(10, -tension));
         }
         public double Attack;

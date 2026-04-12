@@ -102,6 +102,7 @@
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
+            "Off",
             "High pass",
             "Low pass",
             "Band pass"});

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace WFStudio
 {
@@ -32,6 +33,7 @@ namespace WFStudio
         public FilterWrap Filter = new FilterWrap(1000, 2, FilterWrap.FilterType.LOWPASS);
         public EnvController EC;
         public List<Note> CurNotes { get; set; } = new List<Note>();
+        
         public double pitch_shift = 1;
         public void PlayNote(Note n)
         {
@@ -50,6 +52,7 @@ namespace WFStudio
         
         public int Read(float[] buffer, int offset, int count)
         {
+            float[] note_buffer = new float[count];
             // Controller updates
             if (lfo != null) lfo.Update(count);
             if (EC != null) EC.Update(count);
@@ -68,7 +71,8 @@ namespace WFStudio
                 {
                     if (Program.Time <= note.Start + note.Length || note.Length < 0)
                     {
-                        float[] note_buffer = new float[count];
+                        for(int j = 0; j < count; j++) note_buffer[j] = 0f;
+                        
                         note.Phase = WaveGen.Generate(ref note_buffer, WaveType, note.Phase, note.Pitch * pitch_shift, Volume * note.Velocity);
                         Envelope.Apply(ref note_buffer, env, ref note);
 
@@ -83,8 +87,21 @@ namespace WFStudio
                     }
                 }
             }
-            WaveGen.ApplyFilter(ref buffer, offset, count, Filter.Filter);
-            if(buffer != null) volumeMeter1.Amplitude = buffer.Select(x => Math.Abs(x)).Max();
+            WaveGen.ApplyFilter(ref buffer, offset, count, Filter);
+            
+            float amplitude = 0f;
+            for (int i = offset; i < offset + count; i++)
+                amplitude = Math.Max(amplitude, Math.Abs(buffer[i]));
+
+            // marshal update (safe)
+            if (volumeMeter1 != null)
+            {
+                if (volumeMeter1.InvokeRequired)
+                    volumeMeter1.BeginInvoke((Action)(() => volumeMeter1.Amplitude = amplitude));
+                else
+                    volumeMeter1.Amplitude = amplitude;
+            }
+
             return count;
         }
         public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);

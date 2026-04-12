@@ -75,11 +75,13 @@ namespace WFStudio
             }
             return 0;
         }
-        public static void ApplyFilter(ref float[] buffer, int offset, int count, BiQuadFilter filter)
+        public static void ApplyFilter(ref float[] buffer, int offset, int count, FilterWrap filter)
         {
+            if(filter.Type == FilterWrap.FilterType.OFF) return;
+            
             for (int i = offset; i < offset + count; i++)
             {
-                buffer[i] = filter.Transform(buffer[i]);
+                buffer[i] = filter.Filter.Transform(buffer[i]);
             }
         }
     }
