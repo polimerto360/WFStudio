@@ -10,6 +10,8 @@ namespace WFStudio
     {
         ModProperties Target { get; set; }
         string TargetProperty { get; set; }
+        double Base { get; set; }
+        double Amplitude { get; set; }
         void Update(int samples);
     }
 }

@@ -9,11 +9,14 @@ namespace WFStudio
 {
     public static class WaveGen
     {
+        public static Random Rng = new Random();
         public enum Waves
         {
             SINE,
             SAW,
-            SQUARE
+            SQUARE,
+            NOISE,
+            PSEUDO_NOISE
         }
         public static void AddBuffer(ref float[] buffer1, ref float[] buffer2, int offset, int count)
         {
@@ -35,30 +38,27 @@ namespace WFStudio
         {
             return (phase < 0) ? -1 : 1;
         }
+        public static double NoisePoint()
+        {
+            return Rng.NextDouble() * 2 - 1;
+        }
+        public static double PseudoNoisePoint(double phase)
+        {
+            return new Random((int)(phase * 100)).NextDouble() * 2 - 1;
+        }
         public static double Generate(ref float[] buffer, Waves wave_type, double phase, double pitch, double volume = 1.0)
         {
             double sample_rate = Program.audio_output.OutputWaveFormat.SampleRate;
             for (int i = 0; i < buffer.Length; i++)
             {
-                switch(wave_type)
-                {
-                    case Waves.SINE:
-                        buffer[i] += (float)(SinePoint(phase) * volume);
-                        break;
-                    case Waves.SAW:
-                        buffer[i] += (float)(SawPoint(phase) * volume);
-                        break;
-                    case Waves.SQUARE:
-                        buffer[i] += (float)(SquarePoint(phase) * volume);
-                        break;
-                }
+                buffer[i] += (float)(GetPoint(wave_type, phase) * volume);
                 //buffer[i] = (float)Math.Min(Math.Max(buffer[i], -1.0), 1.0);
                 phase += 2 * Math.PI * pitch / sample_rate;
                 phase = Math.IEEERemainder(phase, 2 * Math.PI);
             }
             return phase;
         }
-        public static double GetPoint(Waves wave_type, double phase)
+        public static double GetPoint(Waves wave_type, double phase = 0)
         {
             switch (wave_type)
             {
@@ -68,6 +68,10 @@ namespace WFStudio
                     return SawPoint(phase);
                 case Waves.SQUARE:
                     return SquarePoint(phase);
+                case Waves.NOISE:
+                    return NoisePoint();
+                case Waves.PSEUDO_NOISE:
+                    return PseudoNoisePoint(phase);
             }
             return 0;
         }

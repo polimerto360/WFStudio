@@ -23,23 +23,25 @@ namespace WFStudio
         public double Volume = 1.0;
         public List<string> Properties { get; private set; } = new List<string>
         {
-            "VoiceCount",
-            "OscShape",
+            "Off",
             "Pitch shift",
             "Volume"
         };
         public Envelope env = new Envelope(attack: 0.05, sustain: 0, decay: 0.5, decay_tension: -0.3, release: 0.1);
         public LFO lfo;
         public FilterWrap Filter = new FilterWrap(1000, 2, FilterWrap.FilterType.LOWPASS);
+        public EnvController EC;
         public List<Note> CurNotes { get; set; } = new List<Note>();
         public double pitch_shift = 1;
         public void PlayNote(Note n)
         {
             CurNotes.Add(n);
+            EC.CurNote = new Note(n.Semitones, n.Length, n.Start);
         }
         public void ReleaseNote(Note n)
         {
             n.ReleasedTime = Program.Time;
+            if(EC.CurNote != null && EC.CurNote.Pitch == n.Pitch) EC.CurNote.ReleasedTime = Program.Time;
         }
         public void StopAll()
         {
@@ -48,7 +50,10 @@ namespace WFStudio
         
         public int Read(float[] buffer, int offset, int count)
         {
-            if(lfo != null) lfo.Update(count);
+            // Controller updates
+            if (lfo != null) lfo.Update(count);
+            if (EC != null) EC.Update(count);
+
             for (int i = offset; i < offset + count; i++) buffer[i] = 0f;
             for (int i = 0; i < CurNotes.Count; i++)
             {
@@ -86,7 +91,6 @@ namespace WFStudio
 
         public Synth()
         {
-            Program.Generators.Add(this);
             foreach (string s in env.Properties)
             {
                 Properties.Add("Envelope." + s);
@@ -100,11 +104,19 @@ namespace WFStudio
                
             KeyDown += Program.mainWindow.keyboard.KeyDown; KeyUp += Program.mainWindow.keyboard.KeyUp;
             InitializeComponent();
+            // Initialization for controls
             envControl1.Env = env;
+
             lfo = new LFO(this, "Pitch shift", 5, 0.1, 0, WaveGen.Waves.SINE, 0);
             lfoControl1.Lfo = lfo;
+            
+            EC = new EnvController(this, "Pitch shift", new Envelope(), 0, 1);
+            envControlerUC1.EC = EC;
+
             filterControl1.Filter = Filter;
 
+            // Ready
+            Program.Generators.Add(this);
         }
         public bool SetProperty(string name, double value)
         {
@@ -121,7 +133,6 @@ namespace WFStudio
             switch (name)
             {
                 case "VoiceCount": VoiceCount = (value < 0 ? int.MaxValue : (int)(value * 32)); return true;
-                case "OscShape": return true;
                 case "Pitch shift": pitch_shift = Math.Pow(2, value); return true;
                 case "Volume": volumeSlider1.Volume = (float)Math.Abs(value); return true;
             }
@@ -140,12 +151,7 @@ namespace WFStudio
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch(listBox1.Text)
-            {
-                case "Sine": WaveType = WaveGen.Waves.SINE; break;
-                case "Saw": WaveType = WaveGen.Waves.SAW; break;
-                case "Square": WaveType = WaveGen.Waves.SQUARE; break;
-            }
+            WaveType = (WaveGen.Waves)listBox1.SelectedIndex;
         }
 
         private void pot8_ValueChanged(object sender, EventArgs e)

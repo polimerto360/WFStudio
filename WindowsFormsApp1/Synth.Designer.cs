@@ -43,15 +43,16 @@ namespace WFStudio
             this.label17 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.pot9 = new NAudio.Gui.Pot();
+            this.envControlerUC1 = new WFStudio.EnvControlerUC();
+            this.filterControl1 = new WFStudio.FilterControl();
             this.lfoControl1 = new WFStudio.LFOControl();
             this.envControl1 = new WFStudio.EnvControl();
-            this.filterControl1 = new WFStudio.FilterControl();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(82, 131);
+            this.label1.Location = new System.Drawing.Point(62, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 13);
             this.label1.TabIndex = 1;
@@ -61,7 +62,7 @@ namespace WFStudio
             // 
             this.volumeMeter1.Amplitude = 0.1F;
             this.volumeMeter1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.volumeMeter1.Location = new System.Drawing.Point(697, 252);
+            this.volumeMeter1.Location = new System.Drawing.Point(27, 330);
             this.volumeMeter1.MaxDb = 18F;
             this.volumeMeter1.MinDb = -60F;
             this.volumeMeter1.Name = "volumeMeter1";
@@ -71,7 +72,7 @@ namespace WFStudio
             // 
             // volumeSlider1
             // 
-            this.volumeSlider1.Location = new System.Drawing.Point(82, 389);
+            this.volumeSlider1.Location = new System.Drawing.Point(122, 389);
             this.volumeSlider1.Name = "volumeSlider1";
             this.volumeSlider1.Size = new System.Drawing.Size(96, 16);
             this.volumeSlider1.TabIndex = 6;
@@ -83,17 +84,19 @@ namespace WFStudio
             this.listBox1.Items.AddRange(new object[] {
             "Sine",
             "Saw",
-            "Square"});
-            this.listBox1.Location = new System.Drawing.Point(85, 147);
+            "Square",
+            "Noise",
+            "Pseudo noise"});
+            this.listBox1.Location = new System.Drawing.Point(65, 76);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 43);
+            this.listBox1.Size = new System.Drawing.Size(120, 56);
             this.listBox1.TabIndex = 7;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(89, 234);
+            this.label15.Location = new System.Drawing.Point(74, 161);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(13, 13);
             this.label15.TabIndex = 30;
@@ -103,7 +106,7 @@ namespace WFStudio
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(82, 221);
+            this.label16.Location = new System.Drawing.Point(67, 148);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(66, 13);
             this.label16.TabIndex = 29;
@@ -111,7 +114,7 @@ namespace WFStudio
             // 
             // pot8
             // 
-            this.pot8.Location = new System.Drawing.Point(85, 252);
+            this.pot8.Location = new System.Drawing.Point(70, 179);
             this.pot8.Maximum = 1D;
             this.pot8.Minimum = 0D;
             this.pot8.Name = "pot8";
@@ -123,7 +126,7 @@ namespace WFStudio
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(172, 234);
+            this.label17.Location = new System.Drawing.Point(157, 161);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(13, 13);
             this.label17.TabIndex = 33;
@@ -133,7 +136,7 @@ namespace WFStudio
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(165, 221);
+            this.label18.Location = new System.Drawing.Point(150, 148);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(53, 13);
             this.label18.TabIndex = 32;
@@ -141,7 +144,7 @@ namespace WFStudio
             // 
             // pot9
             // 
-            this.pot9.Location = new System.Drawing.Point(168, 252);
+            this.pot9.Location = new System.Drawing.Point(153, 179);
             this.pot9.Maximum = 1D;
             this.pot9.Minimum = 0D;
             this.pot9.Name = "pot9";
@@ -150,10 +153,26 @@ namespace WFStudio
             this.pot9.Value = 0.5D;
             this.pot9.ValueChanged += new System.EventHandler(this.pot9_ValueChanged);
             // 
+            // envControlerUC1
+            // 
+            this.envControlerUC1.EC = null;
+            this.envControlerUC1.Location = new System.Drawing.Point(259, 389);
+            this.envControlerUC1.Name = "envControlerUC1";
+            this.envControlerUC1.Size = new System.Drawing.Size(582, 88);
+            this.envControlerUC1.TabIndex = 37;
+            // 
+            // filterControl1
+            // 
+            this.filterControl1.Filter = null;
+            this.filterControl1.Location = new System.Drawing.Point(27, 211);
+            this.filterControl1.Name = "filterControl1";
+            this.filterControl1.Size = new System.Drawing.Size(288, 113);
+            this.filterControl1.TabIndex = 36;
+            // 
             // lfoControl1
             // 
             this.lfoControl1.Lfo = null;
-            this.lfoControl1.Location = new System.Drawing.Point(276, 131);
+            this.lfoControl1.Location = new System.Drawing.Point(398, 295);
             this.lfoControl1.Name = "lfoControl1";
             this.lfoControl1.Size = new System.Drawing.Size(443, 88);
             this.lfoControl1.TabIndex = 35;
@@ -161,24 +180,17 @@ namespace WFStudio
             // envControl1
             // 
             this.envControl1.Env = null;
-            this.envControl1.Location = new System.Drawing.Point(276, 56);
+            this.envControl1.Location = new System.Drawing.Point(259, 44);
             this.envControl1.Name = "envControl1";
             this.envControl1.Size = new System.Drawing.Size(297, 88);
             this.envControl1.TabIndex = 34;
-            // 
-            // filterControl1
-            // 
-            this.filterControl1.Filter = null;
-            this.filterControl1.Location = new System.Drawing.Point(276, 234);
-            this.filterControl1.Name = "filterControl1";
-            this.filterControl1.Size = new System.Drawing.Size(288, 113);
-            this.filterControl1.TabIndex = 36;
             // 
             // Synth
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(845, 495);
+            this.Controls.Add(this.envControlerUC1);
             this.Controls.Add(this.filterControl1);
             this.Controls.Add(this.lfoControl1);
             this.Controls.Add(this.envControl1);
@@ -216,5 +228,6 @@ namespace WFStudio
         private EnvControl envControl1;
         private LFOControl lfoControl1;
         private FilterControl filterControl1;
+        private EnvControlerUC envControlerUC1;
     }
 }

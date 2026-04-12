@@ -157,7 +157,9 @@
             this.wavetypecb.Items.AddRange(new object[] {
             "Sine",
             "Saw",
-            "Square"});
+            "Square",
+            "Noise",
+            "Pseudo noise"});
             this.wavetypecb.Location = new System.Drawing.Point(302, 55);
             this.wavetypecb.Name = "wavetypecb";
             this.wavetypecb.Size = new System.Drawing.Size(121, 21);

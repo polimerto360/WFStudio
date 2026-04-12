@@ -97,6 +97,13 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Effect.cs" />
+    <Compile Include="EnvControllerUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EnvControllerUC.Designer.cs">
+      <DependentUpon>EnvControllerUC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnvController.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FilterControl.cs">
       <SubType>UserControl</SubType>
@@ -139,6 +146,9 @@
       <DependentUpon>Synth.cs</DependentUpon>
     </Compile>
     <Compile Include="WaveGen.cs" />
+    <EmbeddedResource Include="EnvControllerUC.resx">
+      <DependentUpon>EnvControllerUC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FilterControl.resx">
       <DependentUpon>FilterControl.cs</DependentUpon>
     </EmbeddedResource>
