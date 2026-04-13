@@ -31,6 +31,7 @@ namespace WFStudio
         public static WasapiOut audio_output = new WasapiOut();
         public static List<Generator> Generators = new List<Generator>();
         public static List<MixerTrack> Tracks = new List<MixerTrack>();
+        public static List<NoteChannel> NoteChannels = new List<NoteChannel>();
         [STAThread]
         static void Main()
         {

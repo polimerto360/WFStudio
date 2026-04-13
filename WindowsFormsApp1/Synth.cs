@@ -94,7 +94,7 @@ namespace WFStudio
                 amplitude = Math.Max(amplitude, Math.Abs(buffer[i]));
 
             // marshal update (safe)
-            if (volumeMeter1 != null)
+            if (volumeMeter1 != null && !(volumeMeter1.IsDisposed || volumeMeter1.Disposing))
             {
                 if (volumeMeter1.InvokeRequired)
                     volumeMeter1.BeginInvoke((Action)(() => volumeMeter1.Amplitude = amplitude));

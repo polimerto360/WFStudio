@@ -23,8 +23,17 @@ namespace WFStudio
         private void button1_Click(object sender, EventArgs e)
         {
             Synth p = new Synth();
+            GeneratorUC g = new GeneratorUC();
+            g.Gen = p;
+            g.GenUI = p;
             //keyboard.gen = p;
             p.Show();
+            
+            Program.NoteChannels.Add(new NoteChannel(p));
+            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(69, 1, 4));
+            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(70, 1, 5));
+            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(68, 1, 6));
+            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(69, 1, 6.5));
 
             //p.KeyDown += keyboard.KeyDown;
             //p.KeyUp += keyboard.KeyUp;

@@ -10,6 +10,8 @@ namespace WFStudio
     {
         public override int Read(float[] buffer, int offset, int count)
         {
+            foreach(NoteChannel nc in Program.NoteChannels) nc.Update();
+            
             foreach(Generator gen in Program.Generators) // render all generators
             {
                 float[] temp = new float[count];

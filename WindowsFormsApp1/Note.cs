@@ -14,11 +14,23 @@ namespace WFStudio
         public double Phase = 0.0;
         public double LastEnv = -1;
         public double Velocity = 1;
+        public Note Duplicate()
+        {
+            Note new_note = new Note();
+            new_note.Semitones = Semitones;
+            new_note.Velocity = Velocity;
+            new_note.Phase = Phase;
+            new_note.Start = Start;
+            new_note.Length = Length;
+            new_note.LastEnv = LastEnv;
+            return new_note;
+        }
         public Note() { }
-        public Note(double st, double length = 0, double start = 0) { // negative length plays forever
+        public Note(double st, double length = 0, double start = 0, double velocity = 1) { // negative length plays forever
             Semitones = st;
             Length = length;
             Start = start;
+            Velocity = velocity;
         }
         public double Pitch
         {
