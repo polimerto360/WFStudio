@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Mixer;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,13 @@ namespace WFStudio
             get { 
                 return sw.Elapsed.TotalSeconds; 
             }
+        }
+        public static long CurSample = 0;
+        public static double BPM = 120;
+        public static int BeatsPerBar = 4;
+        public static double SamplesToTime(long samples)
+        {
+            return samples / (double)audio_output.OutputWaveFormat.SampleRate;
         }
         /// <summary>
         /// The main entry point for the application.

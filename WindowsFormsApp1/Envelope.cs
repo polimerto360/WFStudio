@@ -104,7 +104,7 @@ namespace WFStudio
 
         public double At(ref Note note, bool update_note = true)
         {
-            double ret = At(note.TimeElapsed, note.TimeSinceRelease, note.LastEnv);
+            double ret = At(Program.SamplesToTime(note.ElapsedSamples), note.TimeSinceRelease, note.LastEnv);
             if (note.TimeSinceRelease < 0 && update_note) note.LastEnv = ret;
             return ret;
         }
@@ -112,7 +112,7 @@ namespace WFStudio
         {
             double sample_rate = Program.audio_output.OutputWaveFormat.SampleRate;
             double begin_env = env.At(ref n, false);
-            double end_env = env.At(n.TimeElapsed + buffer.Length / sample_rate, (n.TimeSinceRelease > 0 ? n.TimeSinceRelease + buffer.Length / sample_rate : -1), n.LastEnv);
+            double end_env = env.At(Program.SamplesToTime(n.ElapsedSamples) + buffer.Length / sample_rate, (n.TimeSinceRelease > 0 ? n.TimeSinceRelease + buffer.Length / sample_rate : -1), n.LastEnv);
 
             for (int i = 0; i < buffer.Length; i++)
             {

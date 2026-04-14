@@ -8,24 +8,33 @@ namespace WFStudio
 {
     public class MasterTrack: MixerTrack
     {
+        public static bool Paused = false;
+        public static bool Stopped = false;
+        public static event Action<float[], int> OnRead;
         public override int Read(float[] buffer, int offset, int count)
         {
-            foreach(NoteChannel nc in Program.NoteChannels) nc.Update();
-            
+            if (Stopped)
+            {
+                for(int i = offset; i < offset + count; i++) buffer[i] = 0;
+                return count;
+            }
+            float[] temp = new float[count];
             foreach(Generator gen in Program.Generators) // render all generators
             {
-                float[] temp = new float[count];
+                if(!Paused) gen.noteChannel.Update();
                 gen.Read(temp, 0, count);
                 WaveGen.AddBuffer(ref gen.Target.Buffer, ref temp, offset, count);
             }
             base.Read(buffer, offset, count); // load master buffer
             foreach(MixerTrack t in Program.Tracks) // add everything to master
             {
-                float[] temp = new float[count];
                 t.Read(temp, 0, count);
                 WaveGen.AddBuffer(ref buffer, ref temp, offset, count);
             }
             for(int i = offset; i < offset + count; i++) buffer[i] *= Volume;
+            OnRead?.Invoke(buffer, count);
+
+            if(!Paused) Program.CurSample += count;
             return count;
         }
     }

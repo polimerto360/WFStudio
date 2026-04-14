@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WFStudio
 {
@@ -26,26 +27,39 @@ namespace WFStudio
             else GenUI.Show();
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            int ind = -1;
-            if(int.TryParse(textBox2.Text, out ind) && ind >= 0 && ind < Program.Tracks.Count)
-            {
-                if(ind == 0) Gen.Target = Program.Master;
-                else Gen.Target = Program.Tracks[ind-1];
-            }
-        }
 
         private void pianoroll_button_Click(object sender, EventArgs e)
         {
-            //TODO: Pianoroll
+            Program.mainWindow.AddPianoroll(Gen);
         }
 
         private void remove_channel_Click(object sender, EventArgs e)
         {
+            if(MessageBox.Show("Are you sure you want to remove this channel?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                return;
+            }
             GenUI.Close();
+            if(Program.mainWindow.pianoroll.Gen == Gen)
+            {
+                Program.mainWindow.pianoroll.Close();
+                Program.mainWindow.pianoroll = null;
+            }
             Program.Generators.Remove(Gen);
+            Program.NoteChannels.RemoveAll((x) => x.Target == Gen);
+            Parent.Controls.Remove(this);
             //TODO: Remove from parent
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            int ind = (int)numericUpDown1.Value;
+            if (ind <= Program.Tracks.Count)
+            {
+                if (ind == 0) Gen.Target = Program.Master;
+                else Gen.Target = Program.Tracks[ind - 1];
+            }
+            else numericUpDown1.Value = Program.Tracks.Count;
         }
     }
 }

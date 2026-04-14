@@ -26,7 +26,7 @@ namespace WFStudio
             return new_note;
         }
         public Note() { }
-        public Note(double st, double length = 0, double start = 0, double velocity = 1) { // negative length plays forever
+        public Note(double st, long length = 0, long start = 0, double velocity = 1) { // negative length plays forever
             Semitones = st;
             Length = length;
             Start = start;
@@ -77,8 +77,8 @@ namespace WFStudio
                 throw new Exception("Math is broken");
             }
         }
-        public double Start = 0;
-        public double Length = 0;
+        public long Start = 0;
+        public long Length = 0;
         public double ReleasedTime = -1;
         public double TimeSinceRelease
         {
@@ -88,11 +88,11 @@ namespace WFStudio
                 return Program.Time - ReleasedTime;
             }
         }
-        public double TimeElapsed
+        public long ElapsedSamples
         {
             get
             {
-                return Program.Time - Start;
+                return Program.CurSample - Start;
             }
         }
 

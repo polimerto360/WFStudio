@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
-    internal class NoteChannel
+    public class NoteChannel
     {
         public Generator Target;
         public List<Note> NotesByStart = new List<Note>();
@@ -17,9 +17,9 @@ namespace WFStudio
         }
         public void Update()
         {
-            while (NotesByStart.Count > 0 && NotesByStart[0].Start <= Program.Time)
+            while (NotesByStart.Count > 0 && NotesByStart[0].Start <= Program.CurSample)
             {
-                if (NotesByStart[0].Length + NotesByStart[0].Start > Program.Time)
+                if (NotesByStart[0].Length + NotesByStart[0].Start > Program.CurSample)
                 {
                     Note new_note = NotesByStart[0].Duplicate();
                     Target.PlayNote(new_note);
@@ -29,7 +29,7 @@ namespace WFStudio
                 NotesByStart.RemoveAt(0);
             }
 
-            while (CurNotes.Count > 0 && (CurNotes[0].Start + CurNotes[0].Length) < Program.Time)
+            while (CurNotes.Count > 0 && (CurNotes[0].Start + CurNotes[0].Length) < Program.CurSample)
             {
                 Target.ReleaseNote(CurNotes[0]);
                 CurNotes.RemoveAt(0);

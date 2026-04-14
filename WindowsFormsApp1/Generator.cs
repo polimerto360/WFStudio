@@ -16,5 +16,6 @@ namespace WFStudio
         void PlayNote(Note n);
         void ReleaseNote(Note n);
         int VoiceCount { get; set; }
+        NoteChannel noteChannel { get; set; }
     }
 }
