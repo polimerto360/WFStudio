@@ -22,6 +22,8 @@ namespace WFStudio
         public MixerTrack Target { get; set; } = Program.Master;
         public WaveGen.Waves WaveType { get; set; } = WaveGen.Waves.SAW;
         public NoteChannel noteChannel { get; set; }
+        public event Action<Note> NotePlayed;
+        public event Action<Note> NoteReleased;
         public double Volume = 1.0;
         public List<string> Properties { get; private set; } = new List<string>
         {
@@ -40,11 +42,13 @@ namespace WFStudio
         {
             CurNotes.Add(n);
             EC.CurNote = new Note(n.Semitones, n.Length, n.Start);
+            NotePlayed?.Invoke(n);
         }
         public void ReleaseNote(Note n)
         {
             n.ReleasedTime = Program.Time;
             if (EC.CurNote != null && EC.CurNote.Pitch == n.Pitch) EC.CurNote.ReleasedTime = Program.Time;
+            NoteReleased?.Invoke(n);
         }
         public void StopAll()
         {

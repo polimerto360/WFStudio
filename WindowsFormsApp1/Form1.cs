@@ -15,6 +15,7 @@ namespace WFStudio
     public partial class MainWindow : Form
     {
         public Pianoroll pianoroll;
+        public event Action OnReset;
         public MainWindow()
         {
             InitializeComponent();
@@ -49,12 +50,7 @@ namespace WFStudio
             g.GenUI = p;
             //g.Location = new Point(0, flowLayoutPanel1.Controls.Count * g.Height);
             flowLayoutPanel1.Controls.Add(g);
-            Program.NoteChannels.Add(new NoteChannel(p));
-            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(69, 1, 4));
-            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(70, 1, 5));
-            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(68, 1, 6));
-            //Program.NoteChannels[Program.NoteChannels.Count - 1].NotesByStart.Add(new Note(69, 1, 6.5));
-
+            
             //p.KeyDown += keyboard.KeyDown;
             //p.KeyUp += keyboard.KeyUp;
         }
@@ -93,6 +89,7 @@ namespace WFStudio
         {
             MasterTrack.Stopped = true;
             Program.CurSample = 0;
+            OnReset?.Invoke();
         }
     }
 }

@@ -46,7 +46,6 @@ namespace WFStudio
                 Program.mainWindow.pianoroll = null;
             }
             Program.Generators.Remove(Gen);
-            Program.NoteChannels.RemoveAll((x) => x.Target == Gen);
             Parent.Controls.Remove(this);
             //TODO: Remove from parent
         }

@@ -11,22 +11,32 @@ namespace WFStudio
         public Generator Target;
         public List<Note> NotesByStart = new List<Note>();
         public List<Note> CurNotes = new List<Note>();
+        public int CurIndex = 0;
         public NoteChannel(Generator target)
         {
             Target = target;
+            Program.mainWindow.OnReset += () =>
+            {
+                CurIndex = 0;
+                foreach (Note n in CurNotes)
+                {
+                    Target.ReleaseNote(n);
+                }
+                CurNotes = new List<Note>();
+            };
         }
         public void Update()
         {
-            while (NotesByStart.Count > 0 && NotesByStart[0].Start <= Program.CurSample)
+            while (CurIndex < NotesByStart.Count && NotesByStart.Count > 0 && NotesByStart[CurIndex].Start <= Program.CurSample)
             {
-                if (NotesByStart[0].Length + NotesByStart[0].Start > Program.CurSample)
+                if (NotesByStart[CurIndex].Length + NotesByStart[CurIndex].Start > Program.CurSample)
                 {
-                    Note new_note = NotesByStart[0].Duplicate();
+                    Note new_note = NotesByStart[CurIndex].Duplicate();
                     Target.PlayNote(new_note);
                     CurNotes.Add(new_note);
                     CurNotes.Sort((a, b) => (a.Start + a.Length > b.Start + b.Length) ? 1 : -1);
                 }
-                NotesByStart.RemoveAt(0);
+                CurIndex++;
             }
 
             while (CurNotes.Count > 0 && (CurNotes[0].Start + CurNotes[0].Length) < Program.CurSample)
