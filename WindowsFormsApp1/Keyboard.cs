@@ -78,7 +78,7 @@ namespace WFStudio
             Note n = new Note();
             n.Octave = octave;
             n.Length = -1;
-            n.Start = Program.CurSample;
+            n.Start = Program.TotalSample;
             n.Semitones += semitones;
 
             if (!notes.ContainsKey(e.KeyCode) && notes.Count < gen.VoiceCount)

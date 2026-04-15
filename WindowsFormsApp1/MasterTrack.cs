@@ -13,6 +13,7 @@ namespace WFStudio
         public static event Action<float[], int> OnRead;
         public override int Read(float[] buffer, int offset, int count)
         {
+            Program.TotalSample += count;
             if (Stopped)
             {
                 for(int i = offset; i < offset + count; i++) buffer[i] = 0;
@@ -34,7 +35,7 @@ namespace WFStudio
             for(int i = offset; i < offset + count; i++) buffer[i] *= Volume;
             OnRead?.Invoke(buffer, count);
 
-            if(!Paused) Program.CurSample += count;
+            if (!Paused) Program.CurSample += count;
             return count;
         }
     }

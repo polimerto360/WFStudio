@@ -84,7 +84,7 @@ namespace WFStudio
             }
             MasterTrack.OnRead += (_, samples) =>
             {
-                if (this.IsHandleCreated)
+                if (this.IsHandleCreated && !MasterTrack.Paused)
                 {
                     this.BeginInvoke((Action)(() =>
                     {
@@ -246,7 +246,7 @@ namespace WFStudio
                     //Invalidate(RectFromPianoNote(CurNote));
                     Gen.ReleaseNote(CurNote);
                 }
-                CurNote = new Note(note_num, -1, Program.CurSample);
+                CurNote = new Note(note_num, -1, Program.TotalSample);
                 Gen.PlayNote(CurNote);
                 //Invalidate(RectFromPianoNote(CurNote));
             } else if (mouse_down && MouseNote != null)
@@ -310,9 +310,18 @@ namespace WFStudio
                     default: goto unhandled;
                 }
             } 
+            else if(e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Right: Program.CurSample += (int)(Program.audio_output.OutputWaveFormat.SampleRate); break;
+                    case Keys.Left: Program.CurSample -= (int)(Program.audio_output.OutputWaveFormat.SampleRate); Gen.noteChannel.CurIndex = 0;  break;
+                    default: goto unhandled;
+                }
+            }
             else
             {
-                switch(e.KeyCode)
+                switch (e.KeyCode)
                 {
                     case Keys.Left: start_time -= time_window / 4; break;
                     case Keys.Right: start_time += time_window / 4; break;

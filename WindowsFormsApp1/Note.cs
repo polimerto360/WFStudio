@@ -92,7 +92,7 @@ namespace WFStudio
         {
             get
             {
-                return Program.CurSample - Start;
+                return Program.TotalSample - Start;
             }
         }
 

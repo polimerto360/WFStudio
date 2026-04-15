@@ -72,9 +72,9 @@ namespace WFStudio
                     continue;
                 }
 
-                if (Program.CurSample > note.Start)
+                if (Program.TotalSample > note.Start)
                 {
-                    if (Program.CurSample <= note.Start + note.Length || note.Length < 0)
+                    if (Program.TotalSample <= note.Start + note.Length || note.Length < 0)
                     {
                         for (int j = 0; j < count; j++) note_buffer[j] = 0f;
 

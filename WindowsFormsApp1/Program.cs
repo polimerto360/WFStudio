@@ -20,6 +20,14 @@ namespace WFStudio
             }
         }
         public static long CurSample = 0;
+        public static long TotalSample = 0;
+        public static long SampleDiff
+        {
+            get
+            {
+                return TotalSample - CurSample;
+            }
+        }
         public static double BPM = 120;
         public static int BeatsPerBar = 4;
         public static double SamplesToTime(long samples)

@@ -10,7 +10,7 @@ namespace WFStudio
     {
         public Generator Target;
         public List<Note> NotesByStart = new List<Note>();
-        public List<Note> CurNotes = new List<Note>();
+        public List<Tuple<long, Note>> CurNotes = new List<Tuple<long, Note>>();
         public int CurIndex = 0;
         public NoteChannel(Generator target)
         {
@@ -18,11 +18,11 @@ namespace WFStudio
             Program.mainWindow.OnReset += () =>
             {
                 CurIndex = 0;
-                foreach (Note n in CurNotes)
+                foreach (Tuple<long, Note> n in CurNotes)
                 {
-                    Target.ReleaseNote(n);
+                    Target.ReleaseNote(n.Item2);
                 }
-                CurNotes = new List<Note>();
+                CurNotes = new List<Tuple<long, Note>>();
             };
         }
         public void Update()
@@ -32,16 +32,17 @@ namespace WFStudio
                 if (NotesByStart[CurIndex].Length + NotesByStart[CurIndex].Start > Program.CurSample)
                 {
                     Note new_note = NotesByStart[CurIndex].Duplicate();
+                    new_note.Start += Program.SampleDiff;
                     Target.PlayNote(new_note);
-                    CurNotes.Add(new_note);
-                    CurNotes.Sort((a, b) => (a.Start + a.Length > b.Start + b.Length) ? 1 : -1);
+                    CurNotes.Add(new Tuple<long, Note>(new_note.Start - Program.SampleDiff, new_note));
+                    CurNotes.Sort((a, b) => (a.Item1 + a.Item2.Length > b.Item1 + b.Item2.Length) ? 1 : -1);
                 }
                 CurIndex++;
             }
 
-            while (CurNotes.Count > 0 && (CurNotes[0].Start + CurNotes[0].Length) < Program.CurSample)
+            while (CurNotes.Count > 0 && ((CurNotes[0].Item1 + CurNotes[0].Item2.Length) < Program.CurSample || CurNotes[0].Item1 < Program.CurSample))
             {
-                Target.ReleaseNote(CurNotes[0]);
+                Target.ReleaseNote(CurNotes[0].Item2);
                 CurNotes.RemoveAt(0);
             }
         }
