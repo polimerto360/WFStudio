@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WFStudio
 {
@@ -35,15 +36,17 @@ namespace WFStudio
                     new_note.Start += Program.SampleDiff;
                     Target.PlayNote(new_note);
                     CurNotes.Add(new Tuple<long, Note>(new_note.Start - Program.SampleDiff, new_note));
-                    CurNotes.Sort((a, b) => (a.Item1 + a.Item2.Length > b.Item1 + b.Item2.Length) ? 1 : -1);
                 }
                 CurIndex++;
             }
 
-            while (CurNotes.Count > 0 && ((CurNotes[0].Item1 + CurNotes[0].Item2.Length) < Program.CurSample || CurNotes[0].Item1 < Program.CurSample))
+            foreach (var note in CurNotes.ToArray())
             {
-                Target.ReleaseNote(CurNotes[0].Item2);
-                CurNotes.RemoveAt(0);
+                if ((note.Item1 + note.Item2.Length) < Program.CurSample || note.Item1 > Program.CurSample)
+                {
+                    Target.ReleaseNote(note.Item2);
+                    CurNotes.Remove(note);
+                }
             }
         }
     }

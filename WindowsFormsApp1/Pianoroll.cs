@@ -191,7 +191,7 @@ namespace WFStudio
                         if (e.Button == MouseButtons.Right)
                         {
                             Gen.noteChannel.NotesByStart.Remove(n);
-                            break;
+                            goto invalidate;
                         }
                         MouseXOffset = e.Location.X - RectFromNote(n).Left;
                         break;
@@ -203,6 +203,7 @@ namespace WFStudio
                     Gen.noteChannel.NotesByStart.Add(MouseNote);
                 }
             }
+        invalidate:
             Invalidate();
             Pianoroll_MouseMove(sender, e);
         }
@@ -277,7 +278,8 @@ namespace WFStudio
         private void Pianoroll_MouseUp(object sender, MouseEventArgs e)
         {
             mouse_down = false;
-            if(CurNote != null)
+            MouseXOffset = 0;
+            if (CurNote != null)
             {
                 //InvalidateNotes();
                 Gen.ReleaseNote(CurNote);
