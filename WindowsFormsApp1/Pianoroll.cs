@@ -354,5 +354,10 @@ namespace WFStudio
         {
             Invalidate();
         }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace WFStudio
     public partial class MainWindow : Form
     {
         public Pianoroll pianoroll;
+        public Mixer mixer;
         public event Action OnReset;
         public MainWindow()
         {
@@ -90,6 +91,16 @@ namespace WFStudio
             MasterTrack.Stopped = true;
             Program.CurSample = 0;
             OnReset?.Invoke();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (mixer == null)
+            {
+                mixer = new Mixer();
+            }
+            mixer.Show();
+            mixer.Focus();
         }
     }
 }

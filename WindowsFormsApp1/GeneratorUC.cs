@@ -60,5 +60,10 @@ namespace WFStudio
             }
             else numericUpDown1.Value = Program.Tracks.Count;
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

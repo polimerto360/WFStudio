@@ -53,6 +53,7 @@ namespace WFStudio
             sw.Start();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Master.Effects.Add(new Gain());
             audio_output.Init(Master);
             audio_output.Play();
             mainWindow = new MainWindow();

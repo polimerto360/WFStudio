@@ -96,7 +96,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller.cs" />
-    <Compile Include="Effect.cs" />
+    <Compile Include="Effect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EffectsRack.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EffectsRack.Designer.cs">
+      <DependentUpon>EffectsRack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EffectUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EffectUC.Designer.cs">
+      <DependentUpon>EffectUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="EnvControllerUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -110,6 +124,12 @@
     </Compile>
     <Compile Include="FilterControl.Designer.cs">
       <DependentUpon>FilterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gain.Designer.cs">
+      <DependentUpon>Gain.cs</DependentUpon>
     </Compile>
     <Compile Include="GeneratorUC.cs">
       <SubType>UserControl</SubType>
@@ -140,7 +160,19 @@
     <Compile Include="Keyboard.cs" />
     <Compile Include="LFO.cs" />
     <Compile Include="MasterTrack.cs" />
+    <Compile Include="Mixer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mixer.Designer.cs">
+      <DependentUpon>Mixer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MixerTrack.cs" />
+    <Compile Include="MixerTrackUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MixerTrackUC.Designer.cs">
+      <DependentUpon>MixerTrackUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="ModProperties.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NoteChannel.cs" />
@@ -159,11 +191,20 @@
       <DependentUpon>Synth.cs</DependentUpon>
     </Compile>
     <Compile Include="WaveGen.cs" />
+    <EmbeddedResource Include="EffectsRack.resx">
+      <DependentUpon>EffectsRack.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EffectUC.resx">
+      <DependentUpon>EffectUC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EnvControllerUC.resx">
       <DependentUpon>EnvControllerUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FilterControl.resx">
       <DependentUpon>FilterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gain.resx">
+      <DependentUpon>Gain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GeneratorUC.resx">
       <DependentUpon>GeneratorUC.cs</DependentUpon>
@@ -176,6 +217,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mixer.resx">
+      <DependentUpon>Mixer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MixerTrackUC.resx">
+      <DependentUpon>MixerTrackUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Pianoroll.resx">
       <DependentUpon>Pianoroll.cs</DependentUpon>
