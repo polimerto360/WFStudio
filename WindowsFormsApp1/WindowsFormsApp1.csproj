@@ -125,6 +125,12 @@
     <Compile Include="FilterControl.Designer.cs">
       <DependentUpon>FilterControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compressor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compressor.Designer.cs">
+      <DependentUpon>Compressor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FilterControl.resx">
       <DependentUpon>FilterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compressor.resx">
+      <DependentUpon>Compressor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gain.resx">
       <DependentUpon>Gain.cs</DependentUpon>

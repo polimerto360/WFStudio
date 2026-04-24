@@ -56,7 +56,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(149, 118);
+            this.ClientSize = new System.Drawing.Size(182, 118);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pot1);
             this.Name = "Gain";

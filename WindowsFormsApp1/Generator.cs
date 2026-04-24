@@ -15,6 +15,7 @@ namespace WFStudio
         MixerTrack Target { get; set; }
         void PlayNote(Note n);
         void ReleaseNote(Note n);
+        void StopAll();
         event Action<Note> NotePlayed;
         event Action<Note> NoteReleased;
         int VoiceCount { get; set; }

@@ -54,6 +54,10 @@ namespace WFStudio
             {
                 Program.Tracks.Remove(Target);
                 Parent.Controls.Remove(this);
+                foreach(Generator g in Program.Generators)
+                {
+                    if (g.Target == Target) g.Target = Program.Master;
+                }
             }
         }
     }

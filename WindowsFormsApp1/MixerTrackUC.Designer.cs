@@ -46,6 +46,8 @@
             // volumeMeter1
             // 
             this.volumeMeter1.Amplitude = 0F;
+            this.volumeMeter1.BackColor = System.Drawing.SystemColors.Control;
+            this.volumeMeter1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.volumeMeter1.Location = new System.Drawing.Point(14, 3);
             this.volumeMeter1.MaxDb = 18F;
             this.volumeMeter1.MinDb = -60F;

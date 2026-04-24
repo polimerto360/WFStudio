@@ -17,6 +17,13 @@ namespace WFStudio
             if (e.KeyCode == Keys.Space)
             {
                 MasterTrack.Paused = !MasterTrack.Paused;
+                if (MasterTrack.Paused)
+                {
+                    Program.CurSample = 0;
+                    Program.mainWindow.OnReset?.Invoke();
+                }
+
+
                 return;
             }
             if (e.KeyCode == Keys.Up && e.Control)

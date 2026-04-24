@@ -16,7 +16,7 @@ namespace WFStudio
     {
         public Pianoroll pianoroll;
         public Mixer mixer;
-        public event Action OnReset;
+        public Action OnReset;
         public MainWindow()
         {
             InitializeComponent();
@@ -78,7 +78,6 @@ namespace WFStudio
         private void play_button_Click(object sender, EventArgs e)
         {
             MasterTrack.Paused = false;
-            MasterTrack.Stopped = false;
         }
 
         private void pause_button_Click(object sender, EventArgs e)
@@ -88,8 +87,10 @@ namespace WFStudio
 
         private void stop_button_Click(object sender, EventArgs e)
         {
-            MasterTrack.Stopped = true;
+            //MasterTrack.Stopped = true;
+            MasterTrack.Paused = true;
             Program.CurSample = 0;
+            Program.StopAll();
             OnReset?.Invoke();
         }
 

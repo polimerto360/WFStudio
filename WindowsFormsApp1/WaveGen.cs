@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NAudio.Dsp;
+using NAudio.Wave;
 
 namespace WFStudio
 {
@@ -82,6 +83,14 @@ namespace WFStudio
             for (int i = offset; i < offset + count; i++)
             {
                 buffer[i] = filter.Filter.Transform(buffer[i]);
+            }
+        }
+        public static float[] temp_buf = new float[100000];
+        public static void Mix(float[] buffer, int offset, int count, double mix)
+        {
+            for(int i = offset; i < offset + count; i++)
+            {
+                buffer[i] = (float)Envelope.Lerp(buffer[i], temp_buf[i-offset], mix);
             }
         }
     }

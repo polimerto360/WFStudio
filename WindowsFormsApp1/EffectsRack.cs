@@ -16,6 +16,9 @@ namespace WFStudio
         public EffectsRack(MixerTrack target)
         {
             InitializeComponent();
+            KeyDown += Program.mainWindow.keyboard.KeyDown;
+            KeyUp += Program.mainWindow.keyboard.KeyUp;
+            KeyPreview = true;
             Target = target;
             foreach (Effect effect in Target.Effects)
             {
@@ -28,10 +31,16 @@ namespace WFStudio
             Hide();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Target.Effects.Add(new Gain());
+            switch(comboBox1.Items[comboBox1.SelectedIndex])
+            {
+                case "Gain": Target.Effects.Add(new Gain()); break;
+                case "Compressor": Target.Effects.Add(new Compressor()); break;
+                default: return;
+            }
             flowLayoutPanel1.Controls.Add(new EffectUC(Target.Effects.Last(), Target));
+            comboBox1.Text = "Add effect";
         }
     }
 }

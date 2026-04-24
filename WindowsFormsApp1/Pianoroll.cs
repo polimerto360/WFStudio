@@ -29,6 +29,13 @@ namespace WFStudio
         public double time_window = 5;
         public long old_time = 0;
         public double snap = 0.25; // part of a beat
+        public long SnapSamples
+        {
+            get
+            {
+                return (long)(60 / Program.BPM * snap * Program.audio_output.OutputWaveFormat.SampleRate);
+            }
+        }
         public int time_to_pixels(double time)
         {
             return (int)(time / time_window * (Width - piano_width));
@@ -40,7 +47,9 @@ namespace WFStudio
 
         public Note CurNote;
         public Note MouseNote;
+        public long mousenote_length = 0;
         public int MouseXOffset;
+        public long last_length = 44100;
 
         private Generator gen;
         public Generator Gen { 
@@ -188,6 +197,8 @@ namespace WFStudio
                     if(Inside(e.Location, RectFromNote(n)))
                     {
                         MouseNote = n;
+                        last_length = n.Length;
+                        mousenote_length = n.Length;
                         if (e.Button == MouseButtons.Right)
                         {
                             Gen.noteChannel.NotesByStart.Remove(n);
@@ -199,7 +210,8 @@ namespace WFStudio
                 }
                 if(MouseNote == null)
                 {
-                    MouseNote = new Note(NoteStFromY(e.Location.Y), Program.audio_output.OutputWaveFormat.SampleRate, (long)(Program.audio_output.OutputWaveFormat.SampleRate * pixels_to_time(e.Location.X - piano_width) + start_time));
+                    MouseNote = new Note(NoteStFromY(e.Location.Y), last_length, (long)(Program.audio_output.OutputWaveFormat.SampleRate * pixels_to_time(e.Location.X - piano_width) + start_time));
+                    mousenote_length = MouseNote.Length;
                     Gen.noteChannel.NotesByStart.Add(MouseNote);
                 }
             }
@@ -235,6 +247,11 @@ namespace WFStudio
         {
             return Math.Round(x / snap) * snap;
         }
+
+        public long Snap(long x, long snap)
+        {
+            return (x / snap + (x % snap >= snap/2 ? 1 : 0)) * snap;
+        }
         private void Pianoroll_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.Location.X < piano_width && mouse_down)
@@ -256,8 +273,10 @@ namespace WFStudio
                 if(MouseXOffset > time_to_pixels(Program.SamplesToTime(MouseNote.Length)) - 20)
                 {
                     // grabbed tail of note, change length
-                    long new_length = (long)(Program.audio_output.OutputWaveFormat.SampleRate * (pixels_to_time(e.Location.X - piano_width - MouseXOffset) + start_time)) - MouseNote.Start;
-                    MouseNote.Length += new_length;
+                    //long new_length = (long)(Program.audio_output.OutputWaveFormat.SampleRate * pixels_to_time(e.Location.X - piano_width) + start_time);
+                    mousenote_length += (long)(Program.audio_output.OutputWaveFormat.SampleRate * (pixels_to_time(e.Location.X - piano_width - MouseXOffset) + start_time)) - MouseNote.Start;
+                    MouseNote.Length = Snap(mousenote_length, SnapSamples);
+                    last_length = MouseNote.Length;
                     if (MouseNote.Length < 410) MouseNote.Length = 410;
                     MouseXOffset = e.Location.X - RectFromNote(MouseNote).Left;
                 }

@@ -34,6 +34,13 @@ namespace WFStudio
         {
             return samples / (double)audio_output.OutputWaveFormat.SampleRate;
         }
+        public static void StopAll()
+        {
+            foreach(Generator g in Generators)
+            {
+                g.StopAll();
+            }
+        }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -53,10 +60,11 @@ namespace WFStudio
             sw.Start();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            mainWindow = new MainWindow();
+
             Master.Effects.Add(new Gain());
             audio_output.Init(Master);
             audio_output.Play();
-            mainWindow = new MainWindow();
             Application.Run(mainWindow);
         }
     }

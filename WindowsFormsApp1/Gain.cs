@@ -41,6 +41,9 @@ namespace WFStudio
         public Gain()
         {
             InitializeComponent();
+            KeyDown += Program.mainWindow.keyboard.KeyDown;
+            KeyUp += Program.mainWindow.keyboard.KeyUp;
+            KeyPreview = true;
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {

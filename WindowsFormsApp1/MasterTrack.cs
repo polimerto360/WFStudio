@@ -9,16 +9,17 @@ namespace WFStudio
     public class MasterTrack: MixerTrack
     {
         public static bool Paused = false;
-        public static bool Stopped = false;
+        //public static bool Stopped = false;
         public static event Action<float[], int> OnRead;
+        
         public override int Read(float[] buffer, int offset, int count)
         {
             Program.TotalSample += count;
-            if (Stopped)
-            {
-                for(int i = offset; i < offset + count; i++) buffer[i] = 0;
-                return count;
-            }
+            //if (Stopped)
+            //{
+            //    for(int i = offset; i < offset + count; i++) buffer[i] = 0;
+            //    return count;
+            //}
             float[] temp = new float[count];
             foreach(Generator gen in Program.Generators) // render all generators
             {
