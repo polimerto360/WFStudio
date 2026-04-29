@@ -29,6 +29,16 @@ namespace WFStudio
                 buffer1[i + offset] = (float)Math.Min(Math.Max(buffer1[i + offset], -1.0), 1.0);
             }
         }
+        public static void AddBufferResampled(float[] buffer1, float[] buffer2, int offset, int count, long offset2 = 0, double resampleFactor = 1)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                double curSample = (i + offset2) * resampleFactor;
+                if (curSample + 1 >= buffer2.Length) return;
+                buffer1[i + offset] += (float)Envelope.Lerp(buffer2[(int)curSample], buffer2[(int)curSample + 1], curSample - Math.Floor(curSample));
+                buffer1[i + offset] = (float)Math.Min(Math.Max(buffer1[i + offset], -1.0), 1.0);
+            }
+        }
         public static double SinePoint(double phase)
         {
             return Math.Sin(phase);

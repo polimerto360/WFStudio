@@ -22,6 +22,7 @@ namespace WFStudio
         public MixerTrack Target { get; set; } = Program.Master;
         public WaveFileReader filereader;
         public List<float> samplebuffer;
+        public double BasePitch = 261.63;
         public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
         public void PlayNote(Note note)
         {
@@ -42,7 +43,7 @@ namespace WFStudio
         {
             if(samplebuffer != null)
             foreach(Note n in CurNotes.ToArray()) {
-                WaveGen.AddBuffer(buffer, samplebuffer.ToArray(), offset, count, n.ElapsedSamples);
+                WaveGen.AddBufferResampled(buffer, samplebuffer.ToArray(), offset, count, n.ElapsedSamples, n.Pitch / BasePitch);
             }
             return count;
         }
@@ -67,12 +68,24 @@ namespace WFStudio
                 for (int i = 0; i < filereader.SampleCount; i++)
                 {
                    samplebuffer.AddRange(filereader.ReadNextSampleFrame());
-                }    
+                }
+                label1.Text = "Current: " + openFileDialog1.FileName;
 
             } catch(FormatException er)
             {
                 MessageBox.Show(er.Message, "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                label1.Text = "Current: None";
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog(this);
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
