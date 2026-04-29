@@ -103,5 +103,17 @@ namespace WFStudio
             mixer.Show();
             mixer.Focus();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Sampler p = new Sampler();
+            //keyboard.gen = p;
+            p.Show();
+            GeneratorUC g = new GeneratorUC();
+            g.Gen = p;
+            g.GenUI = p;
+            //g.Location = new Point(0, flowLayoutPanel1.Controls.Count * g.Height);
+            flowLayoutPanel1.Controls.Add(g);
+        }
     }
 }

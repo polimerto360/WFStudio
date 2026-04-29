@@ -86,7 +86,8 @@ namespace WFStudio
             "Saw",
             "Square",
             "Noise",
-            "Pseudo noise"});
+            "Pseudo noise",
+            "Triangle"});
             this.listBox1.Location = new System.Drawing.Point(65, 76);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(120, 56);

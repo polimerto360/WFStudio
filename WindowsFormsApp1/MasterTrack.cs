@@ -25,13 +25,13 @@ namespace WFStudio
             {
                 if(!Paused) gen.noteChannel.Update();
                 gen.Read(temp, 0, count);
-                WaveGen.AddBuffer(ref gen.Target.Buffer, ref temp, offset, count);
+                WaveGen.AddBuffer(gen.Target.Buffer, temp, offset, count);
             }
             base.Read(buffer, offset, count); // load master buffer
             foreach(MixerTrack t in Program.Tracks) // add everything to master
             {
                 t.Read(temp, 0, count);
-                WaveGen.AddBuffer(ref buffer, ref temp, offset, count);
+                WaveGen.AddBuffer(buffer, temp, offset, count);
             }
             for(int i = offset; i < offset + count; i++) buffer[i] *= Volume;
             OnRead?.Invoke(buffer, count);

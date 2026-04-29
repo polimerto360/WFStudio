@@ -17,13 +17,25 @@ namespace WFStudio
             SAW,
             SQUARE,
             NOISE,
-            PSEUDO_NOISE
+            PSEUDO_NOISE,
+            TRIANGLE
         }
-        public static void AddBuffer(ref float[] buffer1, ref float[] buffer2, int offset, int count)
+        public static void AddBuffer(float[] buffer1, float[] buffer2, int offset, int count, long offset2 = 0)
         {
             for(int i = 0; i < count; i++)
             {
-                buffer1[i + offset] += buffer2[i];
+                if (i + offset2 >= buffer2.Length) return;
+                buffer1[i + offset] += buffer2[i + offset2];
+                buffer1[i + offset] = (float)Math.Min(Math.Max(buffer1[i + offset], -1.0), 1.0);
+            }
+        }
+        public static void AddBufferResampled(float[] buffer1, float[] buffer2, int offset, int count, long offset2 = 0, double resampleFactor = 1)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                double curSample = (i + offset2) * resampleFactor;
+                if (curSample + 1 >= buffer2.Length) return;
+                buffer1[i + offset] += (float)Envelope.Lerp(buffer2[(int)curSample], buffer2[(int)curSample + 1], curSample - Math.Floor(curSample));
                 buffer1[i + offset] = (float)Math.Min(Math.Max(buffer1[i + offset], -1.0), 1.0);
             }
         }
@@ -46,6 +58,10 @@ namespace WFStudio
         public static double PseudoNoisePoint(double phase)
         {
             return new Random((int)(phase * 100)).NextDouble() * 2 - 1;
+        }
+        public static double TrianglePoint(double phase)
+        {
+            return Math.Abs(phase) / Math.PI * 2 - 1;
         }
         public static double Generate(ref float[] buffer, Waves wave_type, double phase, double pitch, double volume = 1.0)
         {
@@ -73,6 +89,8 @@ namespace WFStudio
                     return NoisePoint();
                 case Waves.PSEUDO_NOISE:
                     return PseudoNoisePoint(phase);
+                case Waves.TRIANGLE:
+                    return TrianglePoint(phase);
             }
             return 0;
         }
