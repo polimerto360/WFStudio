@@ -243,10 +243,6 @@ namespace WFStudio
         {
             return (Height - y) / note_height + bottom_note;
         }
-        public double Snap(double x, double snap)
-        {
-            return Math.Round(x / snap) * snap;
-        }
 
         public long Snap(long x, long snap)
         {
@@ -282,7 +278,7 @@ namespace WFStudio
                 }
                 else
                 {
-                    long new_start = (long)(Program.audio_output.OutputWaveFormat.SampleRate * Snap(pixels_to_time(e.Location.X - piano_width - MouseXOffset) + start_time, snap));
+                    long new_start = Snap((long)(Program.audio_output.OutputWaveFormat.SampleRate * (pixels_to_time(e.Location.X - piano_width - MouseXOffset) + start_time)), SnapSamples);
                     int new_semitones = NoteStFromY(e.Location.Y);
                     if (new_start < 0) new_start = 0;
                     MouseNote.Start = new_start;
