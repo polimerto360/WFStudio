@@ -38,6 +38,7 @@ namespace WFStudio
                     }));
                 }
             };
+            numericUpDown1.Value = (decimal)Program.BPM;
 
         }
         public Keyboard keyboard = new Keyboard();
@@ -107,6 +108,24 @@ namespace WFStudio
         private void button3_Click(object sender, EventArgs e)
         {
             Sampler p = new Sampler();
+            //keyboard.gen = p;
+            p.Show();
+            GeneratorUC g = new GeneratorUC();
+            g.Gen = p;
+            g.GenUI = p;
+            //g.Location = new Point(0, flowLayoutPanel1.Controls.Count * g.Height);
+            flowLayoutPanel1.Controls.Add(g);
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Program.BPM = (double)numericUpDown1.Value;
+            if(pianoroll != null) pianoroll.Invalidate();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SampleMapper p = new SampleMapper();
             //keyboard.gen = p;
             p.Show();
             GeneratorUC g = new GeneratorUC();

@@ -1,18 +1,19 @@
-﻿using System;
+﻿using NAudio.Gui;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using NAudio.Wave;
-
 namespace WFStudio
 {
-    public partial class Sampler : Form, Generator
+    public partial class SampleMapper : Form, Generator
     {
         public List<Note> CurNotes { get; set; } = new List<Note>();
         public event Action<Note> NotePlayed;
@@ -21,13 +22,12 @@ namespace WFStudio
         public NoteChannel noteChannel { get; set; }
         public MixerTrack Target { get; set; } = Program.Master;
         public WaveFileReader filereader;
-        public List<float> samplebuffer;
-        public double BasePitch = 261.63;
-
-        public long SampleOffset = 0;
-        public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
+        public Dictionary<int, List<float>> samplebuffer;
+        
+       public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
         public void PlayNote(Note note)
         {
+            if (!samplebuffer.ContainsKey((int)note.Semitones)) return;
             CurNotes.Add(note);
             NotePlayed?.Invoke(note);
         }
@@ -37,19 +37,22 @@ namespace WFStudio
             NoteReleased?.Invoke(note);
         }
 
-        public void StopAll() { 
-            CurNotes.Clear(); 
+        public void StopAll()
+        {
+            CurNotes.Clear();
         }
 
         public int Read(float[] buffer, int offset, int count)
         {
-            if(samplebuffer != null)
-            foreach(Note n in CurNotes.ToArray()) {
-                WaveGen.AddBufferResampled(buffer, samplebuffer.ToArray(), offset, count, n.ElapsedSamples + SampleOffset, n.Pitch / BasePitch);
+            if (samplebuffer != null)
+            foreach (Note n in CurNotes.ToArray())
+            {
+                if (!samplebuffer.ContainsKey((int)n.Semitones)) continue;
+                WaveGen.AddBuffer(buffer, samplebuffer[(int)n.Semitones].ToArray(), offset, count, n.ElapsedSamples);
             }
             return count;
         }
-        public Sampler()
+        public SampleMapper()
         {
             InitializeComponent();
             GotFocus += (object sedner, EventArgs e) => { Program.mainWindow.keyboard.gen = this; };
@@ -58,7 +61,6 @@ namespace WFStudio
 
             KeyDown += Program.mainWindow.keyboard.KeyDown; KeyUp += Program.mainWindow.keyboard.KeyUp;
             Program.Generators.Add(this);
-            openFileDialog1.ShowDialog(this);
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -66,19 +68,19 @@ namespace WFStudio
             try
             {
                 filereader = new WaveFileReader(openFileDialog1.FileName);
-                samplebuffer = new List<float>();
+                if(!samplebuffer.ContainsKey((int)numericUpDown1.Value))
+                {
+                    samplebuffer.Add((int)numericUpDown1.Value, new List<float>());
+                }
+                List<float> curbuffer = samplebuffer[(int)numericUpDown1.Value];
                 for (int i = 0; i < filereader.SampleCount; i++)
                 {
-                   samplebuffer.AddRange(filereader.ReadNextSampleFrame());
+                    curbuffer.AddRange(filereader.ReadNextSampleFrame());
                 }
-                label1.Text = "Current: " + openFileDialog1.FileName;
-                pot1.Value = 0.0;
-                pot1_ValueChanged(null, null);
-
-            } catch(FormatException er)
+            }
+            catch (FormatException er)
             {
                 MessageBox.Show(er.Message, "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                label1.Text = "Current: None";
             }
         }
 
@@ -92,10 +94,10 @@ namespace WFStudio
             Hide();
         }
 
-        private void pot1_ValueChanged(object sender, EventArgs e)
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            SampleOffset = (long)(pot1.Value * samplebuffer.Count);
-            offset_label.Text = (SampleOffset / (double)Program.audio_output.OutputWaveFormat.SampleRate).ToString("0.00") + " s";
+            Note tmp = new Note((double)numericUpDown1.Value);
+            label2.Text = $"({tmp.Letter}{tmp.Octave})";
         }
     }
 }

@@ -190,6 +190,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleMapper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SampleMapper.Designer.cs">
+      <DependentUpon>SampleMapper.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sampler.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,6 +258,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SampleMapper.resx">
+      <DependentUpon>SampleMapper.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Sampler.resx">
       <DependentUpon>Sampler.cs</DependentUpon>
     </EmbeddedResource>

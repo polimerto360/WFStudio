@@ -28,7 +28,27 @@ namespace WFStudio
                 return TotalSample - CurSample;
             }
         }
-        public static double BPM = 120;
+        private static double bpm = 120;
+        public static double BPM
+        {
+            get
+            {
+                return bpm;
+            }
+            set
+            {
+                double diff = bpm / value;
+                foreach(Generator g in Generators)
+                {
+                    foreach(Note n in g.noteChannel.NotesByStart)
+                    {
+                        n.Start = (long)(n.Start * diff);
+                        n.Length = (long)(n.Length * diff);
+                    }
+                }
+                bpm = value;
+            }
+        }
         public static int BeatsPerBar = 4;
         public static double SamplesToTime(long samples)
         {

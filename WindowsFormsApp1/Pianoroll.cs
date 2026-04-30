@@ -179,6 +179,13 @@ namespace WFStudio
             {
                 if(time_to_pixels(Program.SamplesToTime(n.Start + n.Length) - start_time) < 0) continue;
                 e.Graphics.FillRectangle(Brushes.Orange, RectFromNote(n));
+                Rectangle innerborder = RectFromNote(n);
+                innerborder.X++;
+                innerborder.Y++;
+                innerborder.Width -= 2;
+                innerborder.Height -= 2;
+
+                e.Graphics.DrawRectangle(Pens.Black, innerborder);
             }
             e.Graphics.DrawLine(Pens.Red, piano_width + time_to_pixels(Program.SamplesToTime(Program.CurSample) - start_time), 0, piano_width + time_to_pixels(Program.SamplesToTime(Program.CurSample) - start_time), Height);
 
@@ -197,14 +204,15 @@ namespace WFStudio
                 {
                     if(Inside(e.Location, RectFromNote(n)))
                     {
-                        MouseNote = n;
-                        last_length = n.Length;
-                        mousenote_length = n.Length;
                         if (e.Button == MouseButtons.Right)
                         {
                             Gen.noteChannel.NotesByStart.Remove(n);
+                            MouseNote = null;
                             goto invalidate;
                         }
+                        MouseNote = n;
+                        last_length = n.Length;
+                        mousenote_length = n.Length;
                         MouseXOffset = e.Location.X - RectFromNote(n).Left;
                         break;
                     }
@@ -274,7 +282,7 @@ namespace WFStudio
                     mousenote_length += (long)(Program.audio_output.OutputWaveFormat.SampleRate * (pixels_to_time(e.Location.X - piano_width - MouseXOffset) + start_time)) - MouseNote.Start;
                     MouseNote.Length = Snap(mousenote_length, SnapSamples);
                     last_length = MouseNote.Length;
-                    if (MouseNote.Length < 410) MouseNote.Length = 410;
+                    if (MouseNote.Length < SnapSamples) MouseNote.Length = SnapSamples;
                     MouseXOffset = e.Location.X - RectFromNote(MouseNote).Left;
                 }
                 else
