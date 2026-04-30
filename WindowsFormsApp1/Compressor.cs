@@ -40,7 +40,10 @@ namespace WFStudio
             for (int i = offset; i < offset + count; i++)
             {
                 WaveGen.temp_buf[i-offset] = buffer[i];
-                WaveGen.temp_buf[i - offset] *= (1 - Ratio * ActivationLevel);
+                if(WaveGen.temp_buf[i - offset] > Treshold)
+                {
+                    WaveGen.temp_buf[i - offset] = Treshold + (WaveGen.temp_buf[i - offset] - Treshold) * (1 - Ratio * ActivationLevel);
+                }
                 WaveGen.temp_buf[i - offset] *= PostGain;
             }
             WaveGen.Mix(buffer, offset, count, Mix);

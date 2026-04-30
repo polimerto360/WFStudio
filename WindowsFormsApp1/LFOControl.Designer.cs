@@ -159,7 +159,8 @@
             "Saw",
             "Square",
             "Noise",
-            "Pseudo noise"});
+            "Pseudo noise",
+            "Triangle"});
             this.wavetypecb.Location = new System.Drawing.Point(302, 55);
             this.wavetypecb.Name = "wavetypecb";
             this.wavetypecb.Size = new System.Drawing.Size(121, 21);

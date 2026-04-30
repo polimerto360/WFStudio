@@ -110,6 +110,7 @@ namespace WFStudio
                     this.BeginInvoke((Action)(() =>
                     {
                         old_time = 0;
+                        Invalidate();
                     }));
                 }
             };

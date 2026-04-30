@@ -74,22 +74,22 @@ namespace WFStudio
 
                 if (Program.TotalSample > note.Start)
                 {
-                    if (Program.TotalSample <= note.Start + note.Length || note.Length < 0)
-                    {
-                        for (int j = 0; j < count; j++) note_buffer[j] = 0f;
+                    //if (Program.TotalSample <= note.Start + note.Length || note.Length < 0)
+                    //{
+                    for (int j = 0; j < count; j++) note_buffer[j] = 0f;
 
-                        note.Phase = WaveGen.Generate(ref note_buffer, WaveType, note.Phase, note.Pitch * pitch_shift, Volume * note.Velocity);
-                        Envelope.Apply(ref note_buffer, env, ref note);
+                    note.Phase = WaveGen.Generate(ref note_buffer, WaveType, note.Phase, note.Pitch * pitch_shift, Volume * note.Velocity);
+                    Envelope.Apply(ref note_buffer, env, ref note);
 
-                        WaveGen.AddBuffer(ref buffer, ref note_buffer, offset, count);
-                        //BiQuadFilter.LowPassFilter(44100, 10000, 2).
-                        //DmoEffectWaveProvider<DmoCompressor> n = new DmoEffectWaveProvider<DmoCompressor>();
+                    WaveGen.AddBuffer(buffer, note_buffer, offset, count);
+                    //BiQuadFilter.LowPassFilter(44100, 10000, 2).
+                    //DmoEffectWaveProvider<DmoCompressor> n = new DmoEffectWaveProvider<DmoCompressor>();
 
-                    }
-                    else
-                    {
-                        CurNotes.RemoveAt(i--);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    CurNotes.RemoveAt(i--);
+                    //}
                 }
             }
             WaveGen.ApplyFilter(ref buffer, offset, count, Filter);
