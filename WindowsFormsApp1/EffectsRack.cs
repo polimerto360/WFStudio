@@ -13,6 +13,7 @@ namespace WFStudio
     public partial class EffectsRack : Form
     {
         public MixerTrack Target;
+        public bool closing = false;
         public EffectsRack(MixerTrack target)
         {
             InitializeComponent();
@@ -27,7 +28,12 @@ namespace WFStudio
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            e.Cancel = true;
+            if(closing)
+                foreach(EffectUC euc in flowLayoutPanel1.Controls)
+                {
+                    if (euc.TargetForm != null) euc.TargetForm.Close();
+                }
+            e.Cancel = !closing;
             Hide();
         }
 

@@ -26,6 +26,11 @@ namespace WFStudio
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            if(closing)
+            foreach(MixerTrackUC mtuc in flowLayoutPanel1.Controls)
+            {
+                    if (mtuc.rack != null) { mtuc.rack.closing = true; mtuc.rack.Close(); }
+            }
             e.Cancel = !closing;
             Hide();
         }

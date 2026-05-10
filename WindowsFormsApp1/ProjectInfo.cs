@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
-    [Serializable]
     public class ProjectInfo
     {
         public string filepath { get; set; } = "project.wfp";

@@ -169,6 +169,7 @@ namespace WFStudio
                 mixer.closing = true;
                 mixer.Close();
             }
+            stop_button_Click(null, null);
 
             Program.LoadProject(openFileDialog1.FileName);
             foreach(Generator g in Program.CurProject.Generators)
