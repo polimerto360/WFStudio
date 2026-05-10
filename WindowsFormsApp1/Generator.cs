@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
-    public interface Generator : ISampleProvider
+    public interface Generator : ISampleProvider, Jsonconvertible
     {
         List<Note> CurNotes { get; set; }
         MixerTrack Target { get; set; }

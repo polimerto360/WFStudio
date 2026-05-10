@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace WFStudio
 {
     public class MixerTrack : ISampleProvider
     {
+        [JsonIgnore]
         public float[] Buffer = new float[100000];
         public float Volume = 1f;
         public List<Effect> Effects = new List<Effect>();

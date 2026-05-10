@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,17 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public class NoteChannel
     {
+        [JsonIgnore]
         public Generator Target;
+        
         public List<Note> NotesByStart = new List<Note>();
+
+        [JsonIgnore]
         public List<Tuple<long, Note>> CurNotes = new List<Tuple<long, Note>>();
+        [JsonIgnore]
         public int CurIndex = 0;
         public NoteChannel(Generator target)
         {

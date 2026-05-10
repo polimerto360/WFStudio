@@ -12,27 +12,28 @@ namespace WFStudio
 {
     public partial class Mixer : Form
     {
+        public bool closing = false;
         public Mixer()
         {
             InitializeComponent();
             KeyDown += Program.mainWindow.keyboard.KeyDown;
             KeyUp += Program.mainWindow.keyboard.KeyUp;
-            flowLayoutPanel1.Controls.Add(new MixerTrackUC(Program.Master));
-            foreach (MixerTrack t in Program.Tracks)
+            flowLayoutPanel1.Controls.Add(new MixerTrackUC(Program.CurProject.Master));
+            foreach (MixerTrack t in Program.CurProject.Tracks)
             {
                 flowLayoutPanel1.Controls.Add(new MixerTrackUC(t));
             }
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            e.Cancel = true;
+            e.Cancel = !closing;
             Hide();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             MixerTrack t = new MixerTrack();
-            Program.Tracks.Add(t);
+            Program.CurProject.Tracks.Add(t);
             flowLayoutPanel1.Controls.Add(new MixerTrackUC(t));
         }
     }

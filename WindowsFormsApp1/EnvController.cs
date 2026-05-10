@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,27 @@ namespace WFStudio
         {
             if (CurNote == null || CurNote.TimeSinceRelease > Env.Release) return;
             Target.SetProperty(TargetProperty, Target.GetBaseValue(TargetProperty) + Base + Amplitude * Env.At(ref CurNote));
+        }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                tgproperty = TargetProperty,
+                bas = Base,
+                amp = Amplitude,
+                env = Env.ToJsonObj()
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            TargetProperty = json.tgproperty;
+            Amplitude = json.amp;
+            Base = json.bas;
+            Env = (Envelope)Env.FromJson(json.env);
+
+            return this;
         }
 
     }

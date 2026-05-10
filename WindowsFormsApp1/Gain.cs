@@ -56,5 +56,22 @@ namespace WFStudio
             Volume = (float)Math.Pow(pot1.Value * 2, 2);
             label1.Text = Volume.ToString("0.00");
         }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                volume = pot1.Value,
+                mix = Mix
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            pot1.Value = json.volume;
+            pot1_ValueChanged(pot1, EventArgs.Empty);
+            Mix = json.mix;
+            return this;
+        }
     }
 }

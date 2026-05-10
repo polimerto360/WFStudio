@@ -50,6 +50,7 @@ namespace WFStudio
         public long mousenote_length = 0;
         public int MouseXOffset;
         public long last_length = 44100;
+        public bool closing = false;
 
         private Generator gen;
         public Generator Gen { 
@@ -147,7 +148,7 @@ namespace WFStudio
 
             // Draw bar lines
             double seconds_per_beat = 60 / Program.BPM;
-            double seconds_per_bar = seconds_per_beat * Program.BeatsPerBar;
+            double seconds_per_bar = seconds_per_beat * Program.CurProject.BeatsPerBar;
             int pixels_per_bar = time_to_pixels(seconds_per_bar);
             
             int cur_bar = (int)Math.Ceiling(start_time / seconds_per_bar);
@@ -155,7 +156,7 @@ namespace WFStudio
             for (int x = bar_offset; x < Width; x += pixels_per_bar) { 
                 e.Graphics.DrawString(cur_bar++.ToString(), new Font(FontFamily.GenericSansSerif, 8), Brushes.Gray, x, 0);
                 e.Graphics.DrawLine(Pens.Black, x, 0, x, Height);
-                for(int i = 1; i < Program.BeatsPerBar; i++)
+                for(int i = 1; i < Program.CurProject.BeatsPerBar; i++)
                 {
                     int beat_x = x + time_to_pixels(seconds_per_beat * i);
                     e.Graphics.DrawLine(Pens.DarkGray, beat_x, 0, beat_x, Height);
@@ -380,7 +381,7 @@ namespace WFStudio
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            e.Cancel = true;
+            e.Cancel = !closing;
             Hide();
         }
     }

@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public partial class SampleMapper : Form, Generator
     {
         public List<Note> CurNotes { get; set; } = new List<Note>();
@@ -20,8 +21,9 @@ namespace WFStudio
         public event Action<Note> NoteReleased;
         public int VoiceCount { get; set; } = 100;
         public NoteChannel noteChannel { get; set; }
-        public MixerTrack Target { get; set; } = Program.Master;
+        public MixerTrack Target { get; set; } = Program.CurProject.Master;
         public WaveFileReader filereader;
+        public Dictionary<int, string> samplepaths = new Dictionary<int, string>();
         public Dictionary<int, List<float>> samplebuffer = new Dictionary<int, List<float>>();
         
        public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
@@ -60,38 +62,39 @@ namespace WFStudio
             OnGotFocus(null);
 
             KeyDown += Program.mainWindow.keyboard.KeyDown; KeyUp += Program.mainWindow.keyboard.KeyUp;
-            Program.Generators.Add(this);
+            Program.CurProject.Generators.Add(this);
         }
-
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        public void loadsample(int note, string path)
         {
             try
             {
-                filereader = new WaveFileReader(openFileDialog1.FileName);
-                if(!samplebuffer.ContainsKey((int)numericUpDown1.Value))
+                filereader = new WaveFileReader(path);
+                if (!samplebuffer.ContainsKey(note))
                 {
-                    samplebuffer.Add((int)numericUpDown1.Value, new List<float>());
-                    SMSampleUC smuc = new SMSampleUC(this, (int)numericUpDown1.Value);
+                    samplebuffer.Add(note, new List<float>());
+                    samplepaths.Add(note, path);
+                    SMSampleUC smuc = new SMSampleUC(this, note);
                     flowLayoutPanel1.Controls.Add(smuc);
-                    Note tmp = new Note((double)numericUpDown1.Value);
-                    smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {openFileDialog1.FileName}";
-                } else
+                    Note tmp = new Note((double)note);
+                    smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {path}";
+                }
+                else
                 {
-                    foreach(var c in flowLayoutPanel1.Controls)
+                    foreach (var c in flowLayoutPanel1.Controls)
                     {
-                        if(c is SMSampleUC)
+                        if (c is SMSampleUC)
                         {
                             SMSampleUC smuc = (SMSampleUC)c;
-                            if (smuc.NoteSt == (int)numericUpDown1.Value)
+                            if (smuc.NoteSt == note)
                             {
-                                Note tmp = new Note((double)numericUpDown1.Value);
-                                smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {openFileDialog1.FileName}";
+                                Note tmp = new Note((double)note);
+                                smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {path}";
                                 break;
                             }
                         }
                     }
                 }
-                List<float> curbuffer = samplebuffer[(int)numericUpDown1.Value];
+                List<float> curbuffer = samplebuffer[note];
 
                 for (int i = 0; i < filereader.SampleCount; i++)
                 {
@@ -102,6 +105,10 @@ namespace WFStudio
             {
                 MessageBox.Show(er.Message, "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            loadsample((int)numericUpDown1.Value, openFileDialog1.FileName);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -118,6 +125,31 @@ namespace WFStudio
         {
             Note tmp = new Note((double)numericUpDown1.Value);
             label2.Text = $"({tmp.Letter}{tmp.Octave})";
+        }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                samples = samplepaths,
+                target = Program.CurProject.Tracks.IndexOf(Target),
+                notechannel = noteChannel
+
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            foreach(KeyValuePair<int, string> kp in json.samples.ToObject<Dictionary<int, string>>())
+            loadsample(kp.Key, kp.Value);
+
+            if (Convert.ToInt32(json.target) == -1) Target = Program.CurProject.Master;
+            else Target = Program.CurProject.Tracks[Convert.ToInt32(json.target)];
+
+            noteChannel = new NoteChannel(this);
+            noteChannel.NotesByStart = json.notechannel.NotesByStart.ToObject<List<Note>>();
+
+            return this;
         }
     }
 }

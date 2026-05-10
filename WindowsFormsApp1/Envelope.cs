@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public class Envelope : ModProperties
     {
         public static double Lerp(double a, double b, double w)
@@ -120,6 +122,32 @@ namespace WFStudio
                 buffer[i] = (float)Math.Min(Math.Max(buffer[i], -1.0), 1.0);
             }
             if (n.TimeSinceRelease < 0) n.LastEnv = end_env;
+        }
+        public object ToJsonObj()
+        {
+            return new
+            {
+                a = Attack,
+                at = Attack_tension,
+                s = Sustain,
+                d = Decay,
+                dt = Decay_tension,
+                r = Release,
+                rt = Release_tension,
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            Attack = json.a;
+            Attack_tension = json.at;
+            Sustain = json.s;
+            Decay = json.d;
+            Decay_tension = json.dt;
+            Release = json.r;
+            Release_tension = json.rt;
+
+            return this;
         }
     }
 }

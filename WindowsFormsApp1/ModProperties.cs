@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
-    public interface ModProperties
+    public interface ModProperties: Jsonconvertible
     {
         List<string> Properties { get; }
         bool SetProperty(string name, double value); // returns true if property was set

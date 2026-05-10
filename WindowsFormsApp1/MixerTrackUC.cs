@@ -29,8 +29,8 @@ namespace WFStudio
                     }));
                 }
             };
-            label1.Text = "Track " + (Program.Tracks.IndexOf(target) + 1);
-            if (Target == Program.Master) button2.Hide();
+            label1.Text = "Track " + (Program.CurProject.Tracks.IndexOf(target) + 1);
+            if (Target == Program.CurProject.Master) button2.Hide();
 
 
         }
@@ -49,14 +49,14 @@ namespace WFStudio
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Target == Program.Master) return;
+            if (Target == Program.CurProject.Master) return;
             if(MessageBox.Show("Are you sure you want to remove this channel?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                Program.Tracks.Remove(Target);
+                Program.CurProject.Tracks.Remove(Target);
                 Parent.Controls.Remove(this);
-                foreach(Generator g in Program.Generators)
+                foreach(Generator g in Program.CurProject.Generators)
                 {
-                    if (g.Target == Target) g.Target = Program.Master;
+                    if (g.Target == Target) g.Target = Program.CurProject.Master;
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace WFStudio
         private void button1_Click(object sender, EventArgs e)
         {
             mapper.samplebuffer.Remove(NoteSt);
+            mapper.samplepaths.Remove(NoteSt);
             Parent.Controls.Remove(this);
         }
     }

@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Gui;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public partial class Compressor : Form, Effect
     {
         public double Mix { get; set; } =  1;
@@ -121,6 +123,38 @@ namespace WFStudio
         {
             PostGain = (float)gain_pot.Value * 10;
             gain_label.Text = PostGain.ToString("0.00");
+        }
+
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                treshold = treshold_pot.Value,
+                ratio = ratio_pot.Value,
+                attack = attack_pot.Value,
+                release = release_pot.Value,
+                gain = gain_pot.Value,
+                mix = Mix
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            treshold_pot.Value = json.treshold;
+            ratio_pot.Value = json.ratio;
+            attack_pot.Value = json.attack;
+            release_pot.Value = json.release;
+            gain_pot.Value = json.gain;
+            Mix = json.mix;
+
+            pot1_ValueChanged(null, null);
+            ratio_pot_ValueChanged(null, null);
+            attack_pot_ValueChanged(null, null);
+            release_pot_ValueChanged(null, null);
+            gain_pot_ValueChanged(null, null);
+
+            return this;
         }
     }
 }

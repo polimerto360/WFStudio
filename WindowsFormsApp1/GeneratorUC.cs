@@ -45,7 +45,7 @@ namespace WFStudio
                 Program.mainWindow.pianoroll.Close();
                 Program.mainWindow.pianoroll = null;
             }
-            Program.Generators.Remove(Gen);
+            Program.CurProject.Generators.Remove(Gen);
             Parent.Controls.Remove(this);
             //TODO: Remove from parent
         }
@@ -53,12 +53,12 @@ namespace WFStudio
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             int ind = (int)numericUpDown1.Value;
-            if (ind <= Program.Tracks.Count)
+            if (ind <= Program.CurProject.Tracks.Count)
             {
-                if (ind == 0) Gen.Target = Program.Master;
-                else Gen.Target = Program.Tracks[ind - 1];
+                if (ind == 0) Gen.Target = Program.CurProject.Master;
+                else Gen.Target = Program.CurProject.Tracks[ind - 1];
             }
-            else numericUpDown1.Value = Program.Tracks.Count;
+            else numericUpDown1.Value = Program.CurProject.Tracks.Count;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

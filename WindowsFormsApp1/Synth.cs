@@ -16,10 +16,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace WFStudio
 {
+    [Serializable]
     public partial class Synth : Form, Generator, ModProperties
     {
         public int VoiceCount { get; set; } = 16;
-        public MixerTrack Target { get; set; } = Program.Master;
+        public MixerTrack Target { get; set; } = Program.CurProject.Master;
         public WaveGen.Waves WaveType { get; set; } = WaveGen.Waves.SAW;
         public NoteChannel noteChannel { get; set; }
         public event Action<Note> NotePlayed;
@@ -138,7 +139,7 @@ namespace WFStudio
             filterControl1.Filter = Filter;
             noteChannel = new NoteChannel(this);
             // Ready
-            Program.Generators.Add(this);
+            Program.CurProject.Generators.Add(this);
         }
         public bool SetProperty(string name, double value)
         {
@@ -202,6 +203,58 @@ namespace WFStudio
         {
             e.Cancel = true;
             Hide();
+        }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                wavetype = (listBox1.SelectedIndex == -1 ? 1 : listBox1.SelectedIndex),
+                coarsepitch = pot8.Value,
+                finepitch = pot9.Value,
+                volume = volumeSlider1.Volume,
+                lfo = lfo.ToJsonObj(),
+                env = env.ToJsonObj(),
+                filter = Filter.ToJsonObj(),
+                ec = EC.ToJsonObj(),
+                target = Program.CurProject.Tracks.IndexOf(Target),
+                notechannel = noteChannel
+
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            listBox1.SelectedIndex = json.wavetype;
+            pot8.Value = json.coarsepitch;
+            pot9.Value = json.finepitch;
+            volumeSlider1.Volume = json.volume;
+
+            listBox1_SelectedIndexChanged(null, null);
+            pot8_ValueChanged(null, null);
+            pot9_ValueChanged(null, null);
+            volumeSlider1_VolumeChanged(null, null);
+
+            lfo = (LFO)lfo.FromJson(json.lfo);
+            lfoControl1.Lfo = lfo;
+
+            env = (Envelope)env.FromJson(json.env);
+            envControl1.Env = env;
+
+            EC = (EnvController)EC.FromJson(json.ec);
+            envControlerUC1.EC = EC;
+
+            Filter = (FilterWrap)Filter.FromJson(json.filter);
+            filterControl1.Filter = Filter;
+
+            if (Convert.ToInt32(json.target) == -1) Target = Program.CurProject.Master;
+            else Target = Program.CurProject.Tracks[Convert.ToInt32(json.target)];
+
+
+            noteChannel = new NoteChannel(this);
+            noteChannel.NotesByStart = json.notechannel.NotesByStart.ToObject<List<Note>>();
+
+            return this;
         }
     }
 }

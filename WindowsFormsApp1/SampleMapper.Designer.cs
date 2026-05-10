@@ -71,7 +71,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "(C4)";
+            this.label2.Text = "(C5)";
             // 
             // button1
             // 

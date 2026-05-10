@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public class LFO : Controller, ModProperties
     {
         public LFO(ModProperties target, string targetProperty, double frequency, double amp, double _base, WaveGen.Waves waveType, double phase)
@@ -65,6 +66,31 @@ namespace WFStudio
         public double GetBaseValue(string property)
         {
             return 0;
+        }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                tgproperty = TargetProperty,
+                freq = Frequency,
+                amp = Amplitude,
+                bas = Base,
+                phase = Phase,
+                wavetype = WaveType
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            TargetProperty = json.tgproperty;
+            Frequency = json.freq;
+            Amplitude = json.amp;
+            Base = json.bas;
+            Phase = json.phase;
+            WaveType = json.wavetype;
+
+            return this;
         }
     }
 }

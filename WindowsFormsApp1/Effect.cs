@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
-    public interface Effect: ISampleProvider, ModProperties
+    public interface Effect: ISampleProvider, ModProperties, Jsonconvertible
     {
         double Mix { get; set; }
     }

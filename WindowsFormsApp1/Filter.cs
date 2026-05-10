@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WFStudio
 {
+    [Serializable]
     public class FilterWrap : ModProperties
     {
         public FilterWrap(double cutoff, double q, FilterType type) 
@@ -93,12 +95,30 @@ namespace WFStudio
         }
         public double GetBaseValue(string property)
         {
-            switch (property)
+            /*switch (property)
             {
                 case "Cutoff": return Cutoff;
                 case "Resonance": return Q;
-            }
+            }*/
             return 0;
+        }
+        public object ToJsonObj()
+        {
+            return new
+            {
+                cutoff = Cutoff,
+                q = Q,
+                type = Type
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            Cutoff = json.cutoff;
+            Q = json.q;
+            Type = json.type;
+
+            return this;
         }
     }
 }

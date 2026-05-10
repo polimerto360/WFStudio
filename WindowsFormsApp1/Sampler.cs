@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,8 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using NAudio.Wave;
 
 namespace WFStudio
 {
@@ -19,9 +18,10 @@ namespace WFStudio
         public event Action<Note> NoteReleased;
         public int VoiceCount { get; set; } = 100;
         public NoteChannel noteChannel { get; set; }
-        public MixerTrack Target { get; set; } = Program.Master;
+        public MixerTrack Target { get; set; } = Program.CurProject.Master;
         public WaveFileReader filereader;
         public List<float> samplebuffer;
+        public string samplefilepath;
         public double BasePitch = 261.63;
 
         public long SampleOffset = 0;
@@ -57,29 +57,35 @@ namespace WFStudio
             OnGotFocus(null);
 
             KeyDown += Program.mainWindow.keyboard.KeyDown; KeyUp += Program.mainWindow.keyboard.KeyUp;
-            Program.Generators.Add(this);
+            Program.CurProject.Generators.Add(this);
             openFileDialog1.ShowDialog(this);
         }
-
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        public void loadsample(string path)
         {
             try
             {
-                filereader = new WaveFileReader(openFileDialog1.FileName);
+                filereader = new WaveFileReader(path);
                 samplebuffer = new List<float>();
                 for (int i = 0; i < filereader.SampleCount; i++)
                 {
-                   samplebuffer.AddRange(filereader.ReadNextSampleFrame());
+                    samplebuffer.AddRange(filereader.ReadNextSampleFrame());
                 }
-                label1.Text = "Current: " + openFileDialog1.FileName;
+                label1.Text = "Current: " + path;
                 pot1.Value = 0.0;
                 pot1_ValueChanged(null, null);
+                samplefilepath = path;
 
-            } catch(FormatException er)
+            }
+            catch (FormatException er)
             {
                 MessageBox.Show(er.Message, "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 label1.Text = "Current: None";
             }
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            loadsample(openFileDialog1.FileName);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -96,6 +102,30 @@ namespace WFStudio
         {
             SampleOffset = (long)(pot1.Value * samplebuffer.Count);
             offset_label.Text = (SampleOffset / (double)Program.audio_output.OutputWaveFormat.SampleRate).ToString("0.00") + " s";
+        }
+
+        public object ToJsonObj()
+        {
+            return new
+            {
+                sample = samplefilepath,
+                target = Program.CurProject.Tracks.IndexOf(Target),
+                notechannel = noteChannel
+
+            };
+        }
+
+        public Jsonconvertible FromJson(dynamic json)
+        {
+            loadsample(json.sample);
+
+            if (Convert.ToInt32(json.target) == -1) Target = Program.CurProject.Master;
+            else Target = Program.CurProject.Tracks[Convert.ToInt32(json.target)];
+
+            noteChannel = new NoteChannel(this);
+            noteChannel.NotesByStart = json.notechannel.NotesByStart.ToObject<List<Note>>();
+
+            return this;
         }
     }
 }

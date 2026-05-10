@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace WFStudio
 {
+    [Serializable]
     public class Note
     {
         public static double twelveth_root_of_2 = Math.Pow(2, 1.0 / 12.0);

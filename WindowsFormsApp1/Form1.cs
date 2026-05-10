@@ -134,5 +134,51 @@ namespace WFStudio
             //g.Location = new Point(0, flowLayoutPanel1.Controls.Count * g.Height);
             flowLayoutPanel1.Controls.Add(g);
         }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            Program.CurProject.filepath = saveFileDialog1.FileName;
+            Program.CurProject.Save();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.FileName = Program.CurProject.filepath;
+            saveFileDialog1.DefaultExt = "wfp";
+            saveFileDialog1.ShowDialog();
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            foreach (Generator g in Program.CurProject.Generators) ((Form)g).Visible = false;
+            Program.CurProject.Generators.Clear();
+
+            if (pianoroll != null)
+            {
+                pianoroll.closing = true;
+                pianoroll.Close();
+            }
+            if (mixer != null)
+            {
+                mixer.closing = true;
+                mixer.Close();
+            }
+
+            Program.LoadProject(openFileDialog1.FileName);
+            foreach(Generator g in Program.CurProject.Generators)
+            {
+                GeneratorUC guc = new GeneratorUC();
+                guc.Gen = g;
+                guc.GenUI = (Form)g;
+                guc.numericUpDown1.Value = Program.CurProject.Tracks.IndexOf(g.Target) + 1;
+                flowLayoutPanel1.Controls.Add(guc);
+            }
+        }
     }
 }

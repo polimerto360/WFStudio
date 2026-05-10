@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
+    [Serializable]
     public class MasterTrack: MixerTrack
     {
         public static bool Paused = false;
@@ -21,14 +22,17 @@ namespace WFStudio
             //    return count;
             //}
             float[] temp = new float[count];
-            foreach(Generator gen in Program.Generators) // render all generators
-            {
-                if(!Paused) gen.noteChannel.Update();
-                gen.Read(temp, 0, count);
-                WaveGen.AddBuffer(gen.Target.Buffer, temp, offset, count);
-            }
+            //lock (Program.CurProject.Generators)
+            //{
+                foreach(Generator gen in Program.CurProject.Generators) // render all generators
+                {
+                    if(!Paused) gen.noteChannel.Update();
+                    gen.Read(temp, 0, count);
+                    WaveGen.AddBuffer(gen.Target.Buffer, temp, offset, count);
+                }
+            //}
             base.Read(buffer, offset, count); // load master buffer
-            foreach(MixerTrack t in Program.Tracks) // add everything to master
+            foreach(MixerTrack t in Program.CurProject.Tracks) // add everything to master
             {
                 t.Read(temp, 0, count);
                 WaveGen.AddBuffer(buffer, temp, offset, count);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WFStudio
 {
-    internal interface Controller
+    internal interface Controller: Jsonconvertible
     {
         ModProperties Target { get; set; }
         string TargetProperty { get; set; }
