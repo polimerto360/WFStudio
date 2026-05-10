@@ -40,7 +40,7 @@ namespace WFStudio
                 return;
             }
             GenUI.Close();
-            if(Program.mainWindow.pianoroll.Gen == Gen)
+            if(Program.mainWindow.pianoroll != null && Program.mainWindow.pianoroll.Gen == Gen)
             {
                 Program.mainWindow.pianoroll.Close();
                 Program.mainWindow.pianoroll = null;

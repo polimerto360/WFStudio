@@ -202,6 +202,12 @@
     <Compile Include="Sampler.Designer.cs">
       <DependentUpon>Sampler.cs</DependentUpon>
     </Compile>
+    <Compile Include="SMSampleUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SMSampleUC.Designer.cs">
+      <DependentUpon>SMSampleUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Synth.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Sampler.resx">
       <DependentUpon>Sampler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SMSampleUC.resx">
+      <DependentUpon>SMSampleUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Synth.resx">
       <DependentUpon>Synth.cs</DependentUpon>

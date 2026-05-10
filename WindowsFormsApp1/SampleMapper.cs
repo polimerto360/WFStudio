@@ -22,7 +22,7 @@ namespace WFStudio
         public NoteChannel noteChannel { get; set; }
         public MixerTrack Target { get; set; } = Program.Master;
         public WaveFileReader filereader;
-        public Dictionary<int, List<float>> samplebuffer;
+        public Dictionary<int, List<float>> samplebuffer = new Dictionary<int, List<float>>();
         
        public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
         public void PlayNote(Note note)
@@ -48,7 +48,7 @@ namespace WFStudio
             foreach (Note n in CurNotes.ToArray())
             {
                 if (!samplebuffer.ContainsKey((int)n.Semitones)) continue;
-                WaveGen.AddBuffer(buffer, samplebuffer[(int)n.Semitones].ToArray(), offset, count, n.ElapsedSamples);
+                WaveGen.AddBufferResampled(buffer, samplebuffer[(int)n.Semitones].ToArray(), offset, count, n.ElapsedSamples, 2);
             }
             return count;
         }
@@ -71,8 +71,28 @@ namespace WFStudio
                 if(!samplebuffer.ContainsKey((int)numericUpDown1.Value))
                 {
                     samplebuffer.Add((int)numericUpDown1.Value, new List<float>());
+                    SMSampleUC smuc = new SMSampleUC(this, (int)numericUpDown1.Value);
+                    flowLayoutPanel1.Controls.Add(smuc);
+                    Note tmp = new Note((double)numericUpDown1.Value);
+                    smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {openFileDialog1.FileName}";
+                } else
+                {
+                    foreach(var c in flowLayoutPanel1.Controls)
+                    {
+                        if(c is SMSampleUC)
+                        {
+                            SMSampleUC smuc = (SMSampleUC)c;
+                            if (smuc.NoteSt == (int)numericUpDown1.Value)
+                            {
+                                Note tmp = new Note((double)numericUpDown1.Value);
+                                smuc.label1.Text = $"Note: {tmp.Letter}{tmp.Octave}; Sample: {openFileDialog1.FileName}";
+                                break;
+                            }
+                        }
+                    }
                 }
                 List<float> curbuffer = samplebuffer[(int)numericUpDown1.Value];
+
                 for (int i = 0; i < filereader.SampleCount; i++)
                 {
                     curbuffer.AddRange(filereader.ReadNextSampleFrame());
